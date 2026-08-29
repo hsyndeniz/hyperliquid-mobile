@@ -1,0 +1,110 @@
+/*
+ * HeroUI Native Theme
+ * Paste into global.css after your HeroUI Native imports.
+ * @see https://heroui.com/docs/native/getting-started/theming
+ */
+/*
+ * Note: "glass" is a web-only design theme.
+ * Native export includes compatible semantic tokens only.
+ */
+
+@import "tailwindcss";
+@import "uniwind";
+
+@import "heroui-native/styles";
+@import "heroui-native-pro/styles";
+
+@source "../node_modules/heroui-native/lib";
+@source "../node_modules/heroui-native-pro/lib";
+
+@layer theme {
+  @variant light {
+    --field-border-width: 1px;
+
+    --radius: 0.5rem;
+
+    --accent: oklch(0.3 0.006 240);
+    --background: oklch(0.97 0.0029 264.54);
+
+    --surface: oklch(100% 0 0 / 0.6);
+    --surface-secondary: oklch(0.9449 0.0004 285.89 / 0.5);
+    --surface-tertiary: oklch(0.9449 0.0004 285.89 / 0.7);
+
+    --overlay: oklch(100% 0 0 / 75%);
+
+    --default: oklch(0 0 0 / 7%);
+
+    --field-background: oklch(0.14 0.05 255 / 6%);
+    --field-border: oklch(0% 0 0 / 4%);
+
+    --separator: oklch(0% 0 0 / 10%);
+
+    --backdrop: oklch(0.7721 0.0036 247.87 / 40%);
+
+    --surface-shadow: 0 0 0 0 transparent;
+    --field-shadow: 0 0 0 0 transparent;
+    --overlay-shadow:
+      0 2px 8px 0 rgba(0, 0, 0, 0.06), 0 -6px 12px 0 rgba(0, 0, 0, 0.03),
+      0 14px 28px 0 rgba(0, 0, 0, 0.08);
+
+    --chart-1: oklch(0.65 0.06 240);
+    --chart-2: oklch(0.55 0.05 240);
+    --chart-3: oklch(0.45 0.04 240);
+    --chart-4: oklch(0.35 0.03 240);
+    --chart-5: oklch(0.75 0.06 240);
+
+    --font-thin: "SFProRounded-Ultralight"; /* 100 */
+    --font-extralight: "SFProRounded-Thin"; /* 200 */
+    --font-light: "SFProRounded-Light"; /* 300 */
+    --font-normal: "SFProRounded-Regular"; /* 400 */
+    --font-medium: "SFProRounded-Medium"; /* 500 */
+    --font-semibold: "SFProRounded-Semibold"; /* 600 */
+    --font-bold: "SFProRounded-Bold"; /* 700 */
+    --font-extrabold: "SFProRounded-Heavy"; /* 800 */
+    --font-black: "SFProRounded-Black"; /* 900 */
+  }
+
+  @variant dark {
+    --field-border-width: 1px;
+    --radius: 0.5rem;
+
+    --accent: oklch(0.98 0.001 240);
+    --accent-foreground: var(--eclipse);
+
+    --background: oklch(0.15 0.003 240);
+
+    --surface: oklch(1 0 0 / 4%);
+    --surface-secondary: oklch(0.9947 0 0 / 0.1);
+    --surface-tertiary: oklch(0.9947 0 0 / 0.2);
+
+    --overlay: oklch(0.2 0.003 240 / 65%);
+
+    --default: oklch(1 0 0 / 8%);
+
+    --field-background: oklch(100% 0 0 / 8%);
+    --field-border: oklch(100% 0 0 / 4%);
+
+    --separator: oklch(100% 0 0 / 12%);
+
+    --backdrop: oklch(0% 0 0 / 30%);
+
+    --surface-shadow: 0 0 0 0 transparent;
+    --field-shadow: 0 0 0 0 transparent;
+
+    --chart-1: oklch(0.55 0.001 240);
+    --chart-2: oklch(0.66 0.001 240);
+    --chart-3: oklch(0.77 0.001 240);
+    --chart-4: oklch(0.87 0.001 240);
+    --chart-5: oklch(0.98 0.001 240);
+
+    --font-thin: "SFProRounded-Ultralight"; /* 100 */
+    --font-extralight: "SFProRounded-Thin"; /* 200 */
+    --font-light: "SFProRounded-Light"; /* 300 */
+    --font-normal: "SFProRounded-Regular"; /* 400 */
+    --font-medium: "SFProRounded-Medium"; /* 500 */
+    --font-semibold: "SFProRounded-Semibold"; /* 600 */
+    --font-bold: "SFProRounded-Bold"; /* 700 */
+    --font-extrabold: "SFProRounded-Heavy"; /* 800 */
+    --font-black: "SFProRounded-Black"; /* 900 */
+  }
+}

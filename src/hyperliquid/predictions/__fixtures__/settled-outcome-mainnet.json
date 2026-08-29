@@ -1,0 +1,70 @@
+{
+  "482": {
+    "spec": {
+      "outcome": 482,
+      "name": "Argentina",
+      "description": "This outcome resolves to Yes if Argentina wins the Game.",
+      "sideSpecs": [
+        {
+          "name": "Yes"
+        },
+        {
+          "name": "No"
+        }
+      ],
+      "quoteToken": "USDC"
+    },
+    "settleFraction": "1.0",
+    "details": "FIFA declared Argentina the winner of the Game.",
+    "question": {
+      "question": {
+        "settled": 87
+      },
+      "name": "World Cup: Argentina vs Austria",
+      "description": "This market has three possible outcomes: Argentina, Draw, or Austria. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Argentina and Austria scheduled for June 22, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Argentina resolves to Yes if Argentina wins the Game. Austria resolves to Yes if Austria wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Argentina, Draw, or Austria has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football"
+    }
+  },
+  "500": {
+    "spec": {
+      "outcome": 500,
+      "name": "Croatia",
+      "description": "This outcome resolves to Yes if Croatia wins the Game.",
+      "sideSpecs": [
+        {
+          "name": "Yes"
+        },
+        {
+          "name": "No"
+        }
+      ],
+      "quoteToken": "USDC"
+    },
+    "settleFraction": "1.0",
+    "details": "FIFA declared Croatia the winner of the Game.",
+    "question": {
+      "question": {
+        "settled": 91
+      },
+      "name": "World Cup: Panama vs Croatia",
+      "description": "This market has three possible outcomes: Panama, Draw, or Croatia. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Panama and Croatia scheduled for June 23, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Panama resolves to Yes if Panama wins the Game. Croatia resolves to Yes if Croatia wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Panama, Draw, or Croatia has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football"
+    }
+  },
+  "1009_live": {
+    "spec": {
+      "outcome": 1009,
+      "name": "Recurring",
+      "description": "class:priceBinary|underlying:BTC|expiry:20260806-0600|targetPrice:64315|period:1d",
+      "sideSpecs": [
+        {
+          "name": "Yes"
+        },
+        {
+          "name": "No"
+        }
+      ],
+      "quoteToken": "USDC"
+    },
+    "settleFraction": "1.0",
+    "details": "price:64871.2"
+  }
+}

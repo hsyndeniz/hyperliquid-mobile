@@ -1,0 +1,150 @@
+{
+  "user": "0x0e7d09a53f348fcef8bb139af9ebb552f4a33fe9",
+  "balances": [
+    {
+      "coin": "USDC",
+      "token": 0,
+      "total": "8093.99658198",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "HYPE",
+      "token": 150,
+      "total": "0.00808803",
+      "hold": "0.0",
+      "entryNtl": "0.39112095"
+    },
+    {
+      "coin": "UBTC",
+      "token": 197,
+      "total": "0.00014994",
+      "hold": "0.0",
+      "entryNtl": "11.61075384"
+    },
+    {
+      "coin": "UETH",
+      "token": 221,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "USDE",
+      "token": 235,
+      "total": "0.2390572",
+      "hold": "0.0",
+      "entryNtl": "0.23902129"
+    },
+    {
+      "coin": "UXPL",
+      "token": 343,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "BZEC",
+      "token": 389,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+10170",
+      "total": "6923.0",
+      "hold": "0.0",
+      "entryNtl": "3535.56496788"
+    },
+    {
+      "coin": "+10171",
+      "total": "8548.0",
+      "hold": "93.0",
+      "entryNtl": "4519.09203978"
+    },
+    {
+      "coin": "+10180",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+10181",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+10190",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+10191",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+10210",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+10211",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+10240",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+10241",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o498",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o499",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o502",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o503",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o611",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o612",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    }
+  ]
+}

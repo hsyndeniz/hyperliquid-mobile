@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "Sentry": {
+      "url": "https://mcp.sentry.dev/mcp/craftlabs-42/hyperliquid",
+      "type": "http"
+    },
+    "argent": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["node_modules/@swmansion/argent/dist/cli.js", "mcp"]
+    }
+  }
+}

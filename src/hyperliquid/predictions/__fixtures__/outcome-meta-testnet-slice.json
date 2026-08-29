@@ -1,0 +1,629 @@
+{
+  "outcomes": [
+    {
+      "outcome": 10973,
+      "name": "template:binaryPrice",
+      "description": "perp:BTC|threshold:62000|time:20261201-1200",
+      "sideSpecs": [
+        {
+          "name": "template:Yes"
+        },
+        {
+          "name": "template:No"
+        }
+      ],
+      "quoteToken": "USDC",
+      "venue": "au"
+    },
+    {
+      "outcome": 10974,
+      "name": "template:binaryPrice",
+      "description": "perp:ETH|threshold:30000|time:20270121-1200",
+      "sideSpecs": [
+        {
+          "name": "template:Yes"
+        },
+        {
+          "name": "template:No"
+        }
+      ],
+      "quoteToken": "USDC",
+      "venue": "au"
+    },
+    {
+      "outcome": 10977,
+      "name": "template:binaryPrice",
+      "description": "perp:HYPE|threshold:100|time:20261231-2359",
+      "sideSpecs": [
+        {
+          "name": "template:Yes"
+        },
+        {
+          "name": "template:No"
+        }
+      ],
+      "quoteToken": "USDC",
+      "venue": "ae"
+    },
+    {
+      "outcome": 10978,
+      "name": "template:binaryPrice",
+      "description": "perp:HYPE|threshold:1000|time:20261231-2359",
+      "sideSpecs": [
+        {
+          "name": "template:Yes"
+        },
+        {
+          "name": "template:No"
+        }
+      ],
+      "quoteToken": "USDC",
+      "venue": "ae"
+    },
+    {
+      "outcome": 7002,
+      "name": "Other",
+      "description": "N/A",
+      "sideSpecs": [
+        {
+          "name": "Yes"
+        },
+        {
+          "name": "No"
+        }
+      ],
+      "quoteToken": "USDH"
+    },
+    {
+      "outcome": 7003,
+      "name": "Akami",
+      "description": "Lean tuna",
+      "sideSpecs": [
+        {
+          "name": "Yes"
+        },
+        {
+          "name": "No"
+        }
+      ],
+      "quoteToken": "USDH"
+    },
+    {
+      "outcome": 7004,
+      "name": "Canned Tuna",
+      "description": "Affordable tuna for bear markets",
+      "sideSpecs": [
+        {
+          "name": "Yes"
+        },
+        {
+          "name": "No"
+        }
+      ],
+      "quoteToken": "USDH"
+    }
+  ],
+  "questions": [
+    {
+      "question": 182,
+      "name": "What will Hypurr eat the most of in May 2026?",
+      "description": "Hypurr has committed to weighing and recording daily food intake in a food journal.",
+      "fallbackOutcome": 7002,
+      "namedOutcomes": [7003, 7004, 7005],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 820,
+      "name": "May CPI year-over-year",
+      "description": "The question resolves by assigning Yes to exactly one of Below 4.3%, Exactly 4.3%, or Above 4.3% based on the Bureau of Labor Statistics Consumer Price Index news release for May 2026, currently scheduled for June 10, 2026 at 8:30 AM ET. The relevant value is the non-seasonally adjusted all items Consumer Price Index for All Urban Consumers (CPI-U) percent change over the 12 months ending May 2026, as reported to one decimal place in the official monthly CPI news release. If BLS has not published the May 2026 all items CPI-U figure by July 15, 2026, or if BLS announces that it will not publish the May 2026 all items CPI-U figure, the question instead resolves to the most recently published month's non-seasonally adjusted all items CPI-U 12-month percent change available at that time. If the May 2026 release occurs on a date other than the scheduled date, the rescheduled release is still used for resolution, provided the figure is published by July 15, 2026. Resolution uses the initial published value, not subsequent revisions.",
+      "fallbackOutcome": 10217,
+      "namedOutcomes": [10218, 10219, 10220],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 823,
+      "name": "2026 World Cup champion",
+      "description": "The question resolves by assigning Yes to the listed outcome whose national team is officially declared the 2026 HYPURR testnet World Cup champion. The result includes the full final, including extra time and penalties, if played. If HYPURR officially declares a champion without a completed final, that official champion determines resolution. If the final is postponed or delayed, the rescheduled final is used, provided HYPURR declares a champion by October 13, 2026 at 11:59 PM ET. HYPURR is the primary resolution source; a consensus of credible reporting may be used if HYPURR information is unavailable or unclear. If no listed outcome is officially declared champion by that deadline, no outcome resolves to Yes under this spec. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10231,
+      "namedOutcomes": [
+        10233, 10236, 10238, 10241, 10247, 10248, 10249, 10258, 10259, 10262, 10265, 10272, 10274,
+        10277, 10280
+      ],
+      "settledNamedOutcomes": [
+        10232, 10234, 10235, 10237, 10239, 10240, 10242, 10243, 10244, 10245, 10246, 10250, 10251,
+        10252, 10253, 10254, 10255, 10256, 10257, 10260, 10261, 10263, 10264, 10266, 10267, 10268,
+        10269, 10270, 10271, 10273, 10275, 10276, 10278, 10279
+      ]
+    },
+    {
+      "question": 844,
+      "name": "World Cup: Saudi Arabia vs Uruguay",
+      "description": "This market has three possible outcomes: Saudi Arabia, Draw, or Uruguay. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Saudi Arabia and Uruguay scheduled for June 15, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Saudi Arabia resolves to Yes if Saudi Arabia wins the Game. Uruguay resolves to Yes if Uruguay wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Saudi Arabia, Draw, or Uruguay has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10394,
+      "namedOutcomes": [10395, 10396, 10397],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 845,
+      "name": "World Cup: Iran vs New Zealand",
+      "description": "This market has three possible outcomes: Iran, Draw, or New Zealand. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Iran and New Zealand scheduled for June 15, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Iran resolves to Yes if Iran wins the Game. New Zealand resolves to Yes if New Zealand wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Iran, Draw, or New Zealand has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10398,
+      "namedOutcomes": [10399, 10400, 10401],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 854,
+      "name": "World Cup: Sweden vs Tunisia",
+      "description": "This market has three possible outcomes: Sweden, Draw, or Tunisia. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Sweden and Tunisia scheduled for June 14, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Sweden resolves to Yes if Sweden wins the Game. Tunisia resolves to Yes if Tunisia wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Sweden, Draw, or Tunisia has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10434,
+      "namedOutcomes": [10435, 10436, 10437],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 855,
+      "name": "World Cup: Belgium vs Egypt",
+      "description": "This market has three possible outcomes: Belgium, Draw, or Egypt. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Belgium and Egypt scheduled for June 15, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Belgium resolves to Yes if Belgium wins the Game. Egypt resolves to Yes if Egypt wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Belgium, Draw, or Egypt has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10438,
+      "namedOutcomes": [10439, 10440, 10441],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 856,
+      "name": "World Cup: Spain vs Cape Verde",
+      "description": "This market has three possible outcomes: Spain, Draw, or Cape Verde. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Spain and Cape Verde scheduled for June 15, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Spain resolves to Yes if Spain wins the Game. Cape Verde resolves to Yes if Cape Verde wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Spain, Draw, or Cape Verde has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10442,
+      "namedOutcomes": [10443, 10444, 10445],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 860,
+      "name": "World Cup: France vs Senegal",
+      "description": "This market has three possible outcomes: France, Draw, or Senegal. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between France and Senegal scheduled for June 16, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. France resolves to Yes if France wins the Game. Senegal resolves to Yes if Senegal wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of France, Draw, or Senegal has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10473,
+      "namedOutcomes": [10474, 10475, 10476],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 861,
+      "name": "World Cup: Iraq vs Norway",
+      "description": "This market has three possible outcomes: Iraq, Draw, or Norway. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Iraq and Norway scheduled for June 16, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Iraq resolves to Yes if Iraq wins the Game. Norway resolves to Yes if Norway wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Iraq, Draw, or Norway has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10477,
+      "namedOutcomes": [10478, 10479, 10480],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 862,
+      "name": "World Cup: Argentina vs Algeria",
+      "description": "This market has three possible outcomes: Argentina, Draw, or Algeria. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Argentina and Algeria scheduled for June 16, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Argentina resolves to Yes if Argentina wins the Game. Algeria resolves to Yes if Algeria wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Argentina, Draw, or Algeria has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10481,
+      "namedOutcomes": [10482, 10483, 10484],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 863,
+      "name": "World Cup: Austria vs Jordan",
+      "description": "This market has three possible outcomes: Austria, Draw, or Jordan. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Austria and Jordan scheduled for June 17, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Austria resolves to Yes if Austria wins the Game. Jordan resolves to Yes if Jordan wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Austria, Draw, or Jordan has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10485,
+      "namedOutcomes": [10486, 10487, 10488],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 864,
+      "name": "World Cup: Portugal vs Congo DR",
+      "description": "This market has three possible outcomes: Portugal, Draw, or Congo DR. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Portugal and Congo DR scheduled for June 17, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Portugal resolves to Yes if Portugal wins the Game. Congo DR resolves to Yes if Congo DR wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Portugal, Draw, or Congo DR has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10489,
+      "namedOutcomes": [10490, 10491, 10492],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 865,
+      "name": "World Cup: England vs Croatia",
+      "description": "This market has three possible outcomes: England, Draw, or Croatia. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between England and Croatia scheduled for June 17, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. England resolves to Yes if England wins the Game. Croatia resolves to Yes if Croatia wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of England, Draw, or Croatia has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10493,
+      "namedOutcomes": [10494, 10495, 10496],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 866,
+      "name": "World Cup: Ghana vs Panama",
+      "description": "This market has three possible outcomes: Ghana, Draw, or Panama. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Ghana and Panama scheduled for June 17, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Ghana resolves to Yes if Ghana wins the Game. Panama resolves to Yes if Panama wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Ghana, Draw, or Panama has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10497,
+      "namedOutcomes": [10498, 10499, 10500],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 867,
+      "name": "World Cup: Uzbekistan vs Colombia",
+      "description": "This market has three possible outcomes: Uzbekistan, Draw, or Colombia. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Uzbekistan and Colombia scheduled for June 17, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Uzbekistan resolves to Yes if Uzbekistan wins the Game. Colombia resolves to Yes if Colombia wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Uzbekistan, Draw, or Colombia has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10501,
+      "namedOutcomes": [10502, 10503, 10504],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 868,
+      "name": "World Cup: Czechia vs South Africa",
+      "description": "This market has three possible outcomes: Czechia, Draw, or South Africa. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Czechia and South Africa scheduled for June 18, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Czechia resolves to Yes if Czechia wins the Game. South Africa resolves to Yes if South Africa wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Czechia, Draw, or South Africa has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10505,
+      "namedOutcomes": [10506, 10507, 10508],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 869,
+      "name": "World Cup: Switzerland vs Bosnia and Herzegovina",
+      "description": "This market has three possible outcomes: Switzerland, Draw, or Bosnia and Herzegovina. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Switzerland and Bosnia and Herzegovina scheduled for June 18, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Switzerland resolves to Yes if Switzerland wins the Game. Bosnia and Herzegovina resolves to Yes if Bosnia and Herzegovina wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Switzerland, Draw, or Bosnia and Herzegovina has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10509,
+      "namedOutcomes": [10510, 10511, 10512],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 870,
+      "name": "World Cup: Canada vs Qatar",
+      "description": "This market has three possible outcomes: Canada, Draw, or Qatar. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Canada and Qatar scheduled for June 18, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Canada resolves to Yes if Canada wins the Game. Qatar resolves to Yes if Qatar wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Canada, Draw, or Qatar has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10513,
+      "namedOutcomes": [10514, 10515, 10516],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 871,
+      "name": "World Cup: Mexico vs Korea Republic",
+      "description": "This market has three possible outcomes: Mexico, Draw, or Korea Republic. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Mexico and Korea Republic scheduled for June 18, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Mexico resolves to Yes if Mexico wins the Game. Korea Republic resolves to Yes if Korea Republic wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Mexico, Draw, or Korea Republic has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10517,
+      "namedOutcomes": [10518, 10519, 10520],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 872,
+      "name": "World Cup: USA vs Australia",
+      "description": "This market has three possible outcomes: USA, Draw, or Australia. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between USA and Australia scheduled for June 19, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. USA resolves to Yes if USA wins the Game. Australia resolves to Yes if Australia wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of USA, Draw, or Australia has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10521,
+      "namedOutcomes": [10522, 10523, 10524],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 873,
+      "name": "World Cup: Scotland vs Morocco",
+      "description": "This market has three possible outcomes: Scotland, Draw, or Morocco. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Scotland and Morocco scheduled for June 19, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Scotland resolves to Yes if Scotland wins the Game. Morocco resolves to Yes if Morocco wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Scotland, Draw, or Morocco has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10525,
+      "namedOutcomes": [10526, 10527, 10528],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 874,
+      "name": "World Cup: Brazil vs Haiti",
+      "description": "This market has three possible outcomes: Brazil, Draw, or Haiti. Exactly one outcome will resolve to Yes; the other two will resolve to No. The market refers to the FIFA World Cup game between Brazil and Haiti scheduled for June 19, 2026 (the \"Game\"), with results determined only after the first 90 minutes of regular play plus stoppage time. Brazil resolves to Yes if Brazil wins the Game. Haiti resolves to Yes if Haiti wins the Game. Draw resolves to Yes if the Game ends in a draw. If the Game is postponed, delayed, or suspended and later completed, the completed Game as ultimately played will be used, provided the Game is completed by July 19, 2026 at 23:59 UTC. If FIFA officially declares either listed team as the winner of the Game without a completed Game, including but not limited to following abandonment, walkover, forfeit, disqualification, or administrative decision, that team's outcome resolves to Yes accordingly. If none of Brazil, Draw, or Haiti has otherwise resolved to Yes, Draw resolves to Yes if: (a) the Game is canceled entirely with no make-up Game, or (b) the Game has not been completed by July 19, 2026 at 23:59 UTC. FIFA is the primary resolution source, although independent reputable news sources may be used as fallback sources if FIFA has not published the relevant result. Once resolved, subsequent appeals, corrections, reversals, or result reassignments by FIFA or any other body will not affect the market resolution. This market has not been endorsed by FIFA. References to \"FIFA,\" the \"FIFA World Cup,\" and any other associated marks are descriptive only and do not indicate an endorsement of this market or any affiliation with FIFA. metadata=category:sports|subCategory:football",
+      "fallbackOutcome": 10529,
+      "namedOutcomes": [10530, 10531, 10532],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 927,
+      "name": "template:sportsContestResult",
+      "description": "competition:Hypurr Dodgeball League|contestType:match|officialSource:Hypurr Dodgeball League|participantA:Cats|participantB:Humans|resolutionDeadline:20260908-2359|scheduledStart:20260901-1800|season:2026|sport:dodgeball|stage:Final",
+      "fallbackOutcome": 11275,
+      "namedOutcomes": [11276, 11277, 11278],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 928,
+      "name": "template:sportsContestResult",
+      "description": "competition:UEFA Conference League Qualifying|contestType:match|officialSource:UEFA|participantA:Ajax|participantB:Shelbourne|resolutionDeadline:20260808-1800|scheduledStart:20260806-1800|season:2026-27|sport:football|stage:Q3 First Leg",
+      "fallbackOutcome": 11294,
+      "namedOutcomes": [11295, 11296, 11297],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 929,
+      "name": "template:sportsContestResult",
+      "description": "competition:Friendly Match|contestType:International Friendlies|officialSource:GospelTruth|participantA:FC Zurich|participantB:Messi's Family|resolutionDeadline:20260809-1234|scheduledStart:20260809-1104|season:2026/27|sport:Football|stage:Week 1",
+      "fallbackOutcome": 11298,
+      "namedOutcomes": [11299, 11300, 11301],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 930,
+      "name": "template:sportsContestResult",
+      "description": "competition:UEFA Europa League|contestType:match|officialSource:UEFA|participantA:Benfica|participantB:Hearts|resolutionDeadline:20260808-2000|scheduledStart:20260806-2000|season:2026/27|sport:football|stage:Third Qualifying Round First Leg",
+      "fallbackOutcome": 11302,
+      "namedOutcomes": [11303, 11304, 11305],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 931,
+      "name": "template:sportsContestResult",
+      "description": "competition:UEFA Europa League|contestType:match|officialSource:UEFA|participantA:Jagiellonia Bialystok|participantB:Rangers|resolutionDeadline:20260808-1600|scheduledStart:20260806-1600|season:2026/27|sport:football|stage:Third Qualifying Round First Leg",
+      "fallbackOutcome": 11309,
+      "namedOutcomes": [11310, 11311, 11312],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 932,
+      "name": "template:sportsContestResult",
+      "description": "competition:UEFA Europa League|contestType:match|officialSource:UEFA|participantA:Hradec Kralove|participantB:Besiktas|resolutionDeadline:20260808-1700|scheduledStart:20260806-1700|season:2026/27|sport:football|stage:Third Qualifying Round First Leg",
+      "fallbackOutcome": 11320,
+      "namedOutcomes": [11321, 11322, 11323],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 933,
+      "name": "template:sportsContestResult",
+      "description": "competition:UEFA Women's Champions League|contestType:semi-final|officialSource:UEFA|participantA:Juventus|participantB:SCU Torreense|resolutionDeadline:20260808-2359|scheduledStart:20260805-1900|season:2026/27|sport:soccer|stage:Second qualifying round",
+      "fallbackOutcome": 11338,
+      "namedOutcomes": [11339, 11340, 11341],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 934,
+      "name": "template:policyRateDecision",
+      "description": "decisionDeadline:20260918-1800|decisionLabel:September 2026|institution:Federal Reserve|officialSource:federalreserve.gov|policyMeasure:federal funds target range upper bound|scheduledDecision:20260917-1800",
+      "fallbackOutcome": 11350,
+      "namedOutcomes": [11351, 11352, 11353],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 935,
+      "name": "template:sportsContestResult",
+      "description": "competition:Premier League|contestType:match|officialSource:premierleague.com|participantA:Arsenal|participantB:Coventry City|resolutionDeadline:20260823-1900|scheduledStart:20260821-1900|season:2026-27|sport:football|stage:Matchweek 1",
+      "fallbackOutcome": 11379,
+      "namedOutcomes": [11380, 11381, 11382],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 937,
+      "name": "template:sportsContestResult",
+      "description": "competition:English Premier League|contestType:season|officialSource:premierleague.com|participantA:Arsenal|participantB:Manchester City|resolutionDeadline:20270531-2300|scheduledStart:20260808-1200|season:2026/27|sport:Association Football|stage:Season",
+      "fallbackOutcome": 11399,
+      "namedOutcomes": [11400, 11401, 11402, 11403, 11404, 11405, 11406],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 938,
+      "name": "template:sportsContestResult",
+      "description": "competition:UEFA Champions League|contestType:tournament|officialSource:uefa.com|participantA:Paris Saint-Germain|participantB:Bayern Munich|resolutionDeadline:20270606-2300|scheduledStart:20260908-1900|season:2026/27|sport:Association Football|stage:Tournament",
+      "fallbackOutcome": 11417,
+      "namedOutcomes": [11418, 11419, 11420, 11421, 11422, 11423, 11424, 11425, 11426],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 939,
+      "name": "template:sportsContestResult",
+      "description": "competition:National Football League|contestType:season|officialSource:nfl.com|participantA:Los Angeles Rams|participantB:Buffalo Bills|resolutionDeadline:20270215-2300|scheduledStart:20260910-0020|season:2026|sport:American Football|stage:Super Bowl",
+      "fallbackOutcome": 11428,
+      "namedOutcomes": [11429, 11430, 11431, 11432, 11433, 11434, 11435, 11436],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 940,
+      "name": "template:sportsContestResult",
+      "description": "competition:National Basketball Association|contestType:season|officialSource:nba.com|participantA:Oklahoma City Thunder|participantB:San Antonio Spurs|resolutionDeadline:20270630-2300|scheduledStart:20261020-2300|season:2026/27|sport:Basketball|stage:NBA Finals",
+      "fallbackOutcome": 11437,
+      "namedOutcomes": [11438, 11439, 11440, 11441, 11442, 11443, 11444, 11445],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 941,
+      "name": "template:sportsContestResult",
+      "description": "competition:Premier League|contestType:match|officialSource:Premier League|participantA:Arsenal|participantB:Coventry City|resolutionDeadline:20260823-1900|scheduledStart:20260821-1900|season:2026/27|sport:football|stage:Matchweek 1",
+      "fallbackOutcome": 11446,
+      "namedOutcomes": [11447, 11448, 11449],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 942,
+      "name": "template:sportsContestResult",
+      "description": "competition:Premier League|contestType:match|officialSource:Premier League|participantA:Hull City|participantB:Manchester United|resolutionDeadline:20260824-1130|scheduledStart:20260822-1130|season:2026/27|sport:football|stage:Matchweek 1",
+      "fallbackOutcome": 11450,
+      "namedOutcomes": [11451, 11452, 11453],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 943,
+      "name": "template:sportsContestResult",
+      "description": "competition:Premier League|contestType:match|officialSource:Premier League|participantA:Newcastle United|participantB:Liverpool|resolutionDeadline:20260825-1530|scheduledStart:20260823-1530|season:2026/27|sport:football|stage:Matchweek 1",
+      "fallbackOutcome": 11454,
+      "namedOutcomes": [11455, 11456, 11457],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 944,
+      "name": "template:sportsContestResult",
+      "description": "competition:Premier League|contestType:match|officialSource:Premier League|participantA:Manchester City|participantB:Bournemouth|resolutionDeadline:20260825-1300|scheduledStart:20260823-1300|season:2026/27|sport:football|stage:Matchweek 1",
+      "fallbackOutcome": 11458,
+      "namedOutcomes": [11459, 11460, 11461],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 945,
+      "name": "template:sportsContestResult",
+      "description": "competition:Premier League|contestType:match|officialSource:Premier League|participantA:Brentford|participantB:Tottenham Hotspur|resolutionDeadline:20260824-1630|scheduledStart:20260822-1630|season:2026/27|sport:football|stage:Matchweek 1",
+      "fallbackOutcome": 11462,
+      "namedOutcomes": [11463, 11464, 11465],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 946,
+      "name": "template:sportsContestResult",
+      "description": "competition:Formula 1 World Championship|contestType:championship|officialSource:formula1.com|participantA:Kimi Antonelli|participantB:Lewis Hamilton|resolutionDeadline:20261213-2300|scheduledStart:20261025-2000|season:2026|sport:F1|stage:Drivers Championship",
+      "fallbackOutcome": 11466,
+      "namedOutcomes": [11467, 11468, 11469, 11470, 11471, 11472],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 947,
+      "name": "template:policyRateDecision",
+      "description": "decisionDeadline:20260924-1200|decisionLabel:September 2026|institution:Bank of England|officialSource:bankofengland.co.uk|policyMeasure:Bank Rate|scheduledDecision:20260917-1100",
+      "fallbackOutcome": 11476,
+      "namedOutcomes": [11477, 11478, 11479],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 948,
+      "name": "template:sportsContestResult",
+      "description": "competition:Major League Baseball|contestType:regular season game|officialSource:MLB Stats API game 824804|participantA:Los Angeles Angels|participantB:Baltimore Orioles|resolutionDeadline:20260808-0000|scheduledStart:20260806-1635|season:2026|sport:baseball|stage:Regular Season",
+      "fallbackOutcome": 11487,
+      "namedOutcomes": [11488, 11489, 11490],
+      "settledNamedOutcomes": []
+    },
+    {
+      "question": 949,
+      "name": "Recurring",
+      "description": "class:priceBucket|underlying:BTC|expiry:20260807-0600|priceThresholds:63530,66123|period:1d",
+      "fallbackOutcome": 11529,
+      "namedOutcomes": [11530, 11531, 11532],
+      "settledNamedOutcomes": []
+    }
+  ],
+  "deployers": [
+    {
+      "deployer": "0x000000000670de987688f215796a06ee3bd94985",
+      "venue": "cat"
+    },
+    {
+      "deployer": "0x047a1c608406972d7c26132f189bbfb0cfefd413",
+      "venue": "aa"
+    },
+    {
+      "deployer": "0x11d4904d07dbc07608ab6ad00d8e88d52fd25ad2",
+      "venue": "beat"
+    },
+    {
+      "deployer": "0x13937d2c1d4b3d96ada88e265e6ce73eeb691869",
+      "venue": "ac"
+    },
+    {
+      "deployer": "0x220e4bbf74120e039985fd6ad6373bdc26f6c191",
+      "venue": "outc"
+    },
+    {
+      "deployer": "0x23575efc908a979aff7bf83589852d9d6546927b",
+      "venue": "game"
+    },
+    {
+      "deployer": "0x24610e8311339258454b165067fc2e459b80c78c",
+      "venue": "ad"
+    },
+    {
+      "deployer": "0x287b4d953098965bfc790c06a624fd58d23ab193",
+      "venue": "ae"
+    },
+    {
+      "deployer": "0x295b91627393e51b96fd1ddd4a0d4c47d010d33f",
+      "venue": "out"
+    },
+    {
+      "deployer": "0x2b2a778e2e61c8436d5161cc63b973d6c64b00d3",
+      "venue": "af"
+    },
+    {
+      "deployer": "0x2e08b8f61525b00d8de7139e21366da7fe38546b",
+      "venue": "ag"
+    },
+    {
+      "deployer": "0x3e720a3797b107f1fbfd240419bf716802ee6099",
+      "venue": "mig"
+    },
+    {
+      "deployer": "0x442fde1f63e7379cca2440bbc19df58937576f04",
+      "venue": "ah"
+    },
+    {
+      "deployer": "0x52ccef75dc22f1c127e3f694c62b868f805ba86c",
+      "venue": "ai"
+    },
+    {
+      "deployer": "0x5be56bd71ee991e2e431901a840a568dc5b6e5ed",
+      "venue": "aj"
+    },
+    {
+      "deployer": "0x5e2145fc7c3a6c3688ac82917474cfa49faf9ca5",
+      "venue": "layr"
+    },
+    {
+      "deployer": "0x63cb25742dc860ed9f22b3be1f41519430cbcb44",
+      "venue": "abaa"
+    },
+    {
+      "deployer": "0x6e41c7c7a990ca9d325edcad5eb98464fba7d85e",
+      "venue": "ak"
+    },
+    {
+      "deployer": "0x7768adf01049466567ae30d9aa92bcb0e6cc8b2f",
+      "venue": "al"
+    },
+    {
+      "deployer": "0x8a7d7deb55c7e3ddf34c9243ce2fe5895975a550",
+      "venue": "am"
+    },
+    {
+      "deployer": "0x9606789f784fcace3dcdd29860f2bfe615cc8937",
+      "venue": "pdct"
+    },
+    {
+      "deployer": "0x9a7b865e7a34078b7537cb48db89c65095908ad3",
+      "venue": "an"
+    },
+    {
+      "deployer": "0xa264f1fa4888a901cbdff30bebbe344ac1ec01fe",
+      "venue": "ao"
+    },
+    {
+      "deployer": "0xa6740c56d26a3ff5a8f8d94bef880585d6b09249",
+      "venue": "ap"
+    },
+    {
+      "deployer": "0xaa81657d0a1b3102d33ace1524ddac4edc78ec32",
+      "venue": "aq"
+    },
+    {
+      "deployer": "0xada1e15b7d71060f28965572daaa8d7dee1a6474",
+      "venue": "ar"
+    },
+    {
+      "deployer": "0xb48c1a1ac675dcaa294ca7831eb729622c487671",
+      "venue": "as"
+    },
+    {
+      "deployer": "0xbb8a7a27e391a5170cda84d5a26457e2cdce9e41",
+      "venue": "at"
+    },
+    {
+      "deployer": "0xc1bc869dd56ece95f406d9f9cb6770e6252cf1a1",
+      "venue": "ali"
+    },
+    {
+      "deployer": "0xcac46d71d129db2d35f4985406c3441bcd2862ef",
+      "venue": "abab"
+    },
+    {
+      "deployer": "0xce17a306cec1ebd78e1dfbef14889374f6aff88a",
+      "venue": "abac"
+    },
+    {
+      "deployer": "0xce724c87619ebd34583975a09dde6848e6c52fb2",
+      "venue": "ax"
+    },
+    {
+      "deployer": "0xd63f994eea1ec81a66c0d0eae406e7e09dea69dc",
+      "venue": "sdn"
+    },
+    {
+      "deployer": "0xd7a0916a054a4ef97e35f9e28438de50efdbac30",
+      "venue": "au"
+    },
+    {
+      "deployer": "0xf71cad0efbb838b8396bd6b34e45c45474854ad6",
+      "venue": "av"
+    },
+    {
+      "deployer": "0xf961aa687616e54226df79967463a1601bbe407e",
+      "venue": "econ"
+    },
+    {
+      "deployer": "0xfc4df1dd84ff202c3efeb9695ae829b8a7d4a5db",
+      "venue": "abad"
+    },
+    {
+      "deployer": "0xffd522e271c84d30e0f24427ba9f1c75e12d949d",
+      "venue": "aw"
+    }
+  ]
+}

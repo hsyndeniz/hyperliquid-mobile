@@ -1,0 +1,151 @@
+[
+  {
+    "universe": [
+      {
+        "tokens": [1, 0],
+        "name": "PURR/USDC",
+        "index": 0,
+        "isCanonical": true
+      },
+      {
+        "tokens": [2, 0],
+        "name": "@1",
+        "index": 1,
+        "isCanonical": false
+      },
+      {
+        "tokens": [1105, 0],
+        "name": "@1035",
+        "index": 1035,
+        "isCanonical": false
+      }
+    ],
+    "tokens": [
+      {
+        "name": "USDC",
+        "szDecimals": 8,
+        "weiDecimals": 8,
+        "index": 0,
+        "tokenId": "0xeb62eee3685fc4c43992febcd9e75443",
+        "isCanonical": true,
+        "evmContract": {
+          "address": "0x0b80659a4076e9e93c7dbe0f10675a16a3e5c206",
+          "evm_extra_wei_decimals": -2
+        },
+        "fullName": null,
+        "deployerTradingFeeShare": "0.0"
+      },
+      {
+        "name": "PURR",
+        "szDecimals": 0,
+        "weiDecimals": 5,
+        "index": 1,
+        "tokenId": "0xc4bf3f870c0e9465323c0b6ed28096c2",
+        "isCanonical": true,
+        "evmContract": {
+          "address": "0xa9056c15938f9aff34cd497c722ce33db0c2fd57",
+          "evm_extra_wei_decimals": 13
+        },
+        "fullName": "Hypurr",
+        "deployerTradingFeeShare": "0.0"
+      },
+      {
+        "name": "TEST",
+        "szDecimals": 1,
+        "weiDecimals": 8,
+        "index": 2,
+        "tokenId": "0x98b101daf4ff26697646131261c100bf",
+        "isCanonical": false,
+        "evmContract": null,
+        "fullName": null,
+        "deployerTradingFeeShare": "0.0"
+      },
+      {
+        "name": "HYPE",
+        "szDecimals": 2,
+        "weiDecimals": 8,
+        "index": 1105,
+        "tokenId": "0x7317beb7cceed72ef0b346074cc8e7ab",
+        "isCanonical": false,
+        "evmContract": {
+          "address": "0x0000000000000000000000000000000000000000",
+          "evm_extra_wei_decimals": 10
+        },
+        "fullName": "Hyperliquid",
+        "deployerTradingFeeShare": "0.0"
+      }
+    ]
+  },
+  [
+    {
+      "prevDayPx": "0.7175",
+      "dayNtlVlm": "11.48",
+      "markPx": "0.7175",
+      "midPx": null,
+      "circulatingSupply": "5264.0",
+      "coin": "#102380",
+      "totalSupply": "184467440737095.53125",
+      "dayBaseVlm": "16.0"
+    },
+    {
+      "prevDayPx": "0.2825",
+      "dayNtlVlm": "4.52",
+      "markPx": "0.2825",
+      "midPx": null,
+      "circulatingSupply": "3487.0",
+      "coin": "#102381",
+      "totalSupply": "184467440737095.53125",
+      "dayBaseVlm": "16.0"
+    },
+    {
+      "prevDayPx": "0.0",
+      "dayNtlVlm": "0.0",
+      "markPx": "0.5",
+      "midPx": null,
+      "circulatingSupply": "7060.0",
+      "coin": "#70020",
+      "totalSupply": "184467440737095.53125",
+      "dayBaseVlm": "0.0"
+    },
+    {
+      "prevDayPx": "0.0",
+      "dayNtlVlm": "0.0",
+      "markPx": "0.5",
+      "midPx": null,
+      "circulatingSupply": "0.0",
+      "coin": "#70021",
+      "totalSupply": "184467440737095.53125",
+      "dayBaseVlm": "0.0"
+    },
+    {
+      "prevDayPx": "39.999",
+      "dayNtlVlm": "250305.2067799999",
+      "markPx": "40.0",
+      "midPx": "41.043",
+      "circulatingSupply": "474619620.1879073381",
+      "coin": "@1035",
+      "totalSupply": "999352669.1362503767",
+      "dayBaseVlm": "5569.63"
+    },
+    {
+      "prevDayPx": "0.0",
+      "dayNtlVlm": "0.0",
+      "markPx": "1.0936",
+      "midPx": null,
+      "circulatingSupply": "999.81880382",
+      "coin": "@1",
+      "totalSupply": "999.81880382",
+      "dayBaseVlm": "0.0"
+    },
+    {
+      "prevDayPx": "4.6252",
+      "dayNtlVlm": "1422.825",
+      "markPx": "4.6252",
+      "midPx": "4.60235",
+      "circulatingSupply": "198729775.328880012",
+      "coin": "PURR/USDC",
+      "totalSupply": "198732673.3698300123",
+      "dayBaseVlm": "308.0"
+    }
+  ]
+]

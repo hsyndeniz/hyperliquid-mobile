@@ -1,0 +1,1244 @@
+{
+  "balances": [
+    {
+      "coin": "USDC",
+      "token": 0,
+      "total": "6486552.089747279",
+      "hold": "18887.00289",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "PURR",
+      "token": 1,
+      "total": "85371.48606",
+      "hold": "0.0",
+      "entryNtl": "396053.66269822"
+    },
+    {
+      "coin": "BREAD",
+      "token": 4,
+      "total": "18.0",
+      "hold": "0.0",
+      "entryNtl": "472.58870212"
+    },
+    {
+      "coin": "CHUTORO",
+      "token": 11,
+      "total": "2069.67",
+      "hold": "0.0",
+      "entryNtl": "1261.05782344"
+    },
+    {
+      "coin": "QUIZ",
+      "token": 54,
+      "total": "838.47359206",
+      "hold": "0.0",
+      "entryNtl": "843.50443361"
+    },
+    {
+      "coin": "BTC",
+      "token": 69,
+      "total": "1.82515",
+      "hold": "0.0",
+      "entryNtl": "338.51256829"
+    },
+    {
+      "coin": "AG",
+      "token": 100,
+      "total": "9.993002",
+      "hold": "0.0",
+      "entryNtl": "12.59196"
+    },
+    {
+      "coin": "BARK",
+      "token": 242,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "GLUCK",
+      "token": 496,
+      "total": "52403159.9306000024",
+      "hold": "0.0",
+      "entryNtl": "370.22546693"
+    },
+    {
+      "coin": "TESTH",
+      "token": 619,
+      "total": "10.0",
+      "hold": "0.0",
+      "entryNtl": "30.353"
+    },
+    {
+      "coin": "ATARST",
+      "token": 699,
+      "total": "12.12345678",
+      "hold": "0.0",
+      "entryNtl": "722.67925865"
+    },
+    {
+      "coin": "SCHILO",
+      "token": 788,
+      "total": "524.63250009",
+      "hold": "0.0",
+      "entryNtl": "14.798875"
+    },
+    {
+      "coin": "FEUSD",
+      "token": 1075,
+      "total": "3720.862168",
+      "hold": "0.0",
+      "entryNtl": "1996.92908625"
+    },
+    {
+      "coin": "HYPE",
+      "token": 1105,
+      "total": "755.13075456",
+      "hold": "0.0",
+      "entryNtl": "53449.87312053"
+    },
+    {
+      "coin": "MUNCH",
+      "token": 1111,
+      "total": "75503.22772",
+      "hold": "0.0",
+      "entryNtl": "4.15041242"
+    },
+    {
+      "coin": "UNIT",
+      "token": 1129,
+      "total": "4.083667636",
+      "hold": "0.0",
+      "entryNtl": "175945.55835391"
+    },
+    {
+      "coin": "ABCD",
+      "token": 1199,
+      "total": "2.0157001027",
+      "hold": "0.0",
+      "entryNtl": "806.28004108"
+    },
+    {
+      "coin": "TZERO",
+      "token": 1204,
+      "total": "124010.148865",
+      "hold": "31502.03",
+      "entryNtl": "124010.148865"
+    },
+    {
+      "coin": "ACDD",
+      "token": 1219,
+      "total": "924.9825",
+      "hold": "0.0",
+      "entryNtl": "15.4804"
+    },
+    {
+      "coin": "UETH",
+      "token": 1242,
+      "total": "0.57306668",
+      "hold": "0.0",
+      "entryNtl": "343.97759903"
+    },
+    {
+      "coin": "USOL",
+      "token": 1279,
+      "total": "37.48574295",
+      "hold": "0.0",
+      "entryNtl": "8620.1073257"
+    },
+    {
+      "coin": "ONLYUP",
+      "token": 1283,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "USDEEE",
+      "token": 1295,
+      "total": "11023.56214464",
+      "hold": "227.958955",
+      "entryNtl": "11023.56214464"
+    },
+    {
+      "coin": "UFART",
+      "token": 1301,
+      "total": "35.382104",
+      "hold": "0.0",
+      "entryNtl": "55.69500467"
+    },
+    {
+      "coin": "GREATE",
+      "token": 1325,
+      "total": "2.85454195",
+      "hold": "0.0",
+      "entryNtl": "0.00066863"
+    },
+    {
+      "coin": "USDZZ",
+      "token": 1328,
+      "total": "109324.10701825",
+      "hold": "4475.107749",
+      "entryNtl": "109324.10701825"
+    },
+    {
+      "coin": "UPUMP",
+      "token": 1344,
+      "total": "13.557292",
+      "hold": "0.0",
+      "entryNtl": "0.08269948"
+    },
+    {
+      "coin": "TRADES",
+      "token": 1361,
+      "total": "107.38182239",
+      "hold": "0.0",
+      "entryNtl": "0.09342218"
+    },
+    {
+      "coin": "BONK",
+      "token": 1381,
+      "total": "10998554.5813200008",
+      "hold": "0.0",
+      "entryNtl": "372.67822406"
+    },
+    {
+      "coin": "EXMPL",
+      "token": 1384,
+      "total": "0.22582936",
+      "hold": "0.0",
+      "entryNtl": "0.00045165"
+    },
+    {
+      "coin": "UXPL",
+      "token": 1398,
+      "total": "251.512198",
+      "hold": "0.0",
+      "entryNtl": "155.94802374"
+    },
+    {
+      "coin": "NQ",
+      "token": 1424,
+      "total": "21.98525538",
+      "hold": "0.0",
+      "entryNtl": "21.98525538"
+    },
+    {
+      "coin": "UMON",
+      "token": 1426,
+      "total": "899.996173",
+      "hold": "0.0",
+      "entryNtl": "182.2492346"
+    },
+    {
+      "coin": "UDZ",
+      "token": 1427,
+      "total": "324.33753475",
+      "hold": "0.0",
+      "entryNtl": "32.43375347"
+    },
+    {
+      "coin": "NQ2",
+      "token": 1429,
+      "total": "32.78697143",
+      "hold": "0.0",
+      "entryNtl": "2.3370739"
+    },
+    {
+      "coin": "DENIM",
+      "token": 1434,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "HORSE",
+      "token": 1435,
+      "total": "40192.13992599",
+      "hold": "0.0",
+      "entryNtl": "40192.13992599"
+    },
+    {
+      "coin": "USDH",
+      "token": 1452,
+      "total": "96368.78563125",
+      "hold": "0.0",
+      "entryNtl": "96368.78563125"
+    },
+    {
+      "coin": "PHAT",
+      "token": 1463,
+      "total": "9375.6124779",
+      "hold": "0.0",
+      "entryNtl": "127.50832969"
+    },
+    {
+      "coin": "SAM",
+      "token": 1464,
+      "total": "9001.5278427",
+      "hold": "0.0",
+      "entryNtl": "124.76117589"
+    },
+    {
+      "coin": "UUENA",
+      "token": 1474,
+      "total": "10.700001",
+      "hold": "0.0",
+      "entryNtl": "5.51050051"
+    },
+    {
+      "coin": "ASDFS",
+      "token": 1477,
+      "total": "0.0099552",
+      "hold": "0.0",
+      "entryNtl": "8.08257372"
+    },
+    {
+      "coin": "XYZT",
+      "token": 1486,
+      "total": "15.99250084",
+      "hold": "0.0",
+      "entryNtl": "2.3057663"
+    },
+    {
+      "coin": "TUSDC",
+      "token": 1493,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "DTF",
+      "token": 1503,
+      "total": "863698451.7606395483",
+      "hold": "0.0",
+      "entryNtl": "99102416086.711227417"
+    },
+    {
+      "coin": "XAG",
+      "token": 1508,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "XZEC",
+      "token": 1526,
+      "total": "17.320326279",
+      "hold": "0.0",
+      "entryNtl": "3743.25211785"
+    },
+    {
+      "coin": "TGUSD",
+      "token": 1535,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1536",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1537",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1538",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1539",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "SALMON",
+      "token": 1544,
+      "total": "103.8886919066",
+      "hold": "0.0",
+      "entryNtl": "9235634.6816374194"
+    },
+    {
+      "coin": "FLOW",
+      "token": 1545,
+      "total": "500.0",
+      "hold": "0.0",
+      "entryNtl": "0.00249999"
+    },
+    {
+      "coin": "o1549",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1550",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1551",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1552",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1566",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1567",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1568",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1569",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1570",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1571",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1572",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1573",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "USDYP",
+      "token": 1576,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "EZSUSD",
+      "token": 1583,
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1594",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1595",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1662",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1663",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1666",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1667",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1702",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1703",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1704",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1705",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1706",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1707",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1708",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1709",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1710",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+70020",
+      "total": "157.0",
+      "hold": "0.0",
+      "entryNtl": "41.86666562"
+    },
+    {
+      "coin": "+70021",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+70030",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+70031",
+      "total": "743.0",
+      "hold": "0.0",
+      "entryNtl": "277.00727378"
+    },
+    {
+      "coin": "+70040",
+      "total": "4886.0",
+      "hold": "0.0",
+      "entryNtl": "1913.78590526"
+    },
+    {
+      "coin": "+70041",
+      "total": "500.0",
+      "hold": "0.0",
+      "entryNtl": "60.0"
+    },
+    {
+      "coin": "+70050",
+      "total": "823.0",
+      "hold": "0.0",
+      "entryNtl": "326.41208397"
+    },
+    {
+      "coin": "+70051",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1723",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1724",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1725",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1726",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1737",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1738",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1755",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1756",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1757",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1758",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110810",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110811",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102250",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102251",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110820",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110821",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110830",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110831",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110840",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110841",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110750",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110751",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102170",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102171",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102180",
+      "total": "270.0",
+      "hold": "0.0",
+      "entryNtl": "184.599"
+    },
+    {
+      "coin": "+102181",
+      "total": "243.0",
+      "hold": "0.0",
+      "entryNtl": "46.8521"
+    },
+    {
+      "coin": "+102200",
+      "total": "1.0",
+      "hold": "0.0",
+      "entryNtl": "0.85"
+    },
+    {
+      "coin": "+102201",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110760",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110761",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102310",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+110770",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110771",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102330",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "HMEONG",
+      "token": 1895,
+      "total": "100043.991996",
+      "hold": "0.0",
+      "entryNtl": "100319.69076248"
+    },
+    {
+      "coin": "+110780",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110790",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102360",
+      "total": "974.0",
+      "hold": "0.0",
+      "entryNtl": "459.91763082"
+    },
+    {
+      "coin": "+102361",
+      "total": "446.0",
+      "hold": "0.0",
+      "entryNtl": "124.58496"
+    },
+    {
+      "coin": "+109740",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109741",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102380",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+102381",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109940",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109950",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109951",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102410",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+109960",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109961",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109970",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109980",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109730",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110290",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102470",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+102480",
+      "total": "185.0",
+      "hold": "0.0",
+      "entryNtl": "104.97534444"
+    },
+    {
+      "coin": "+102481",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102490",
+      "total": "26.0",
+      "hold": "0.0",
+      "entryNtl": "5.23229812"
+    },
+    {
+      "coin": "+102491",
+      "total": "50.0",
+      "hold": "0.0",
+      "entryNtl": "25.0"
+    },
+    {
+      "coin": "+109770",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109771",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109780",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+111350",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+111360",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1938",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "o1940",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109880",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109890",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102580",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+102590",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+109900",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+109910",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102620",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+110020",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110030",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102650",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+110070",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110050",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110060",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110860",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110740",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110100",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102720",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110800",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102740",
+      "total": "39.0",
+      "hold": "0.0",
+      "entryNtl": "0.84310717"
+    },
+    {
+      "coin": "+110850",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110870",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102770",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110140",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+107240",
+      "total": "13333.0",
+      "hold": "0.0",
+      "entryNtl": "9999.75"
+    },
+    {
+      "coin": "+107241",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+102800",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110910",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+110911",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+104780",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+104781",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+104790",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+104791",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+103940",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+103950",
+      "total": "1510.0",
+      "hold": "0.0",
+      "entryNtl": "738.781"
+    },
+    {
+      "coin": "+103951",
+      "total": "500.0",
+      "hold": "0.0",
+      "entryNtl": "257.5"
+    },
+    {
+      "coin": "+103960",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+103961",
+      "total": "13.0",
+      "hold": "0.0",
+      "entryNtl": "2.6"
+    },
+    {
+      "coin": "+103970",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "+103971",
+      "total": "0.0",
+      "hold": "0.0",
+      "entryNtl": "0.0"
+    },
+    {
+      "coin": "ANSEM",
+      "token": 2196,
+      "total": "2404.804013",
+      "hold": "0.0",
+      "entryNtl": "2404.804013"
+    }
+  ],
+  "tokenToAvailableAfterMaintenance": [
+    [0, "6473640.4872312797"],
+    [1204, "92508.118865"],
+    [1295, "10924.72945964"],
+    [1328, "104869.24926925"],
+    [1424, "21.98525538"],
+    [1434, "0.0"],
+    [1435, "40192.13992599"],
+    [1452, "96368.78563125"]
+  ]
+}

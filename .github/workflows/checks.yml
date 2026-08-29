@@ -1,0 +1,54 @@
+# The three checks every change has to keep green, plus the guard suites.
+#
+# Deliberately does NOT run the smoke scripts or the end-to-end suite. Those
+# talk to live testnet: they are rate-limited per IP (shared CI runners would
+# throttle each other), some of them sign real testnet actions, and they need
+# a signer key that has no business being a CI secret. They stay a local step —
+# see CONTRIBUTING.md.
+
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+concurrency:
+  # A new push supersedes the run in flight for the same ref.
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # `.nvmrc` holds a NODE version, so it is fed to setup-node, not to
+      # setup-bun — pointing setup-bun at it would ask for "bun 22.17.0".
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # `--frozen-lockfile`: CI must fail on a lockfile that disagrees with
+      # package.json rather than quietly resolving something else. Several
+      # native packages here are pinned to exact Expo-aligned versions, and a
+      # silent bump is how a green CI ships a broken build.
+      - run: bun install --frozen-lockfile
+
+      - run: bun run typecheck
+
+      - run: bun run lint
+
+      # Includes the guard suites: no secret under an EXPO_PUBLIC_ name, no
+      # .env value hardcoded in the source tree, every routed action carrying
+      # its acting account, the native security settings in app.json, and the
+      # font rule.
+      - run: bun run test

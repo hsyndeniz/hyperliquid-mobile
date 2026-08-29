@@ -1,0 +1,78 @@
+[
+  {
+    "name": "PM",
+    "subAccountUser": "0xb8cdc4f1abaf999d8cb206bd2ebb6cc591de2ee9",
+    "master": "0x92ae4209e3a5760903aff0c423312392eb3f86a8",
+    "dexToClearinghouseState": [],
+    "spotState": {
+      "portfolioMarginEnabled": true,
+      "balances": [
+        {
+          "coin": "USDC",
+          "token": 0,
+          "total": "130.36579681",
+          "hold": "-2008.62038899",
+          "entryNtl": "0.0",
+          "spotHold": "0.0",
+          "ltv": "0.0",
+          "supplied": "130.36579681"
+        },
+        {
+          "coin": "HYPE",
+          "token": 150,
+          "total": "72.34389348",
+          "hold": "0.0",
+          "entryNtl": "0.0",
+          "ltv": "0.5",
+          "supplied": "72.34389348"
+        },
+        {
+          "coin": "UBTC",
+          "token": 197,
+          "total": "0.0",
+          "hold": "0.0",
+          "entryNtl": "0.0",
+          "ltv": "0.5"
+        },
+        {
+          "coin": "USDE",
+          "token": 235,
+          "total": "0.0",
+          "hold": "0.0",
+          "entryNtl": "0.0"
+        },
+        {
+          "coin": "USDT0",
+          "token": 268,
+          "total": "0.0",
+          "hold": "-2010.4700214",
+          "entryNtl": "0.0",
+          "spotHold": "0.0",
+          "ltv": "0.0"
+        },
+        {
+          "coin": "USDH",
+          "token": 360,
+          "total": "0.10678416",
+          "hold": "0.0",
+          "entryNtl": "0.10678416",
+          "ltv": "0.0"
+        }
+      ],
+      "portfolioMarginRatio": "0.0",
+      "tokenToPortfolioBorrowRatio": [
+        [0, "0.0"],
+        [360, "0.0"]
+      ],
+      "tokenToPortfolioSupplyRatio": [[150, "0.0000723439"]],
+      "tokenToAvailableAfterMaintenance": [
+        [0, "3143.2963798"],
+        [150, "72.34389348"],
+        [197, "0.0"],
+        [268, "3015.70503161"],
+        [360, "0.10678416"]
+      ]
+    },
+    "abstraction": "portfolioMargin"
+  }
+]

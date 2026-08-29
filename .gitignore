@@ -1,0 +1,54 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Uniwind (generated on first `expo start`)
+uniwind-types.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# Local env files
+# .env holds public config only (EXPO_PUBLIC_* is inlined into the bundle), but
+# it stays untracked so a stray secret can never be committed by accident.
+# Copy .env.example to .env to get started; CI/EAS supply these as build env vars.
+#
+# EVERY .env* spelling except the committed example. The pattern used to be
+# `.env` plus `.env*.local`, which left `.env.development` and `.env.production`
+# — filenames Expo's own tooling loads, and which this repo's guard suite
+# already scans for key material — tracked if anyone created one.
+.env
+.env.*
+!.env.example
+
+# TypeScript
+*.tsbuildinfo
+
+# Generated native folders
+/ios
+/android

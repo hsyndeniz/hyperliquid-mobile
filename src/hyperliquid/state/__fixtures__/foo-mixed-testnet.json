@@ -1,0 +1,20 @@
+[
+  {
+    "coin": "STABLE",
+    "side": "A",
+    "limitPx": "0.034849",
+    "sz": "466263.0",
+    "oid": 57211750234,
+    "timestamp": 1785428387804,
+    "triggerCondition": "N/A",
+    "isTrigger": false,
+    "triggerPx": "0.0",
+    "children": [],
+    "isPositionTpsl": false,
+    "reduceOnly": true,
+    "orderType": "Limit",
+    "origSz": "466263.0",
+    "tif": "Gtc",
+    "cloid": null
+  }
+]

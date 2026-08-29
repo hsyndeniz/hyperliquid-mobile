@@ -1,0 +1,62 @@
+{
+  "expo": {
+    "name": "hl",
+    "slug": "hl",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "heroui-native-app",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.craftlabs.hl"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.craftlabs.hl",
+      "allowBackup": false
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-status-bar",
+      "expo-build-properties",
+      [
+        "react-native-quick-crypto",
+        {
+          "sodiumEnabled": true
+        }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "hyperliquid",
+          "organization": "craftlabs-42"
+        }
+      ],
+      "@sentry/react-native",
+      "expo-router"
+    ],
+    "experiments": {
+      "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fef57cd0-fa8d-44aa-830d-fa1186238713"
+      }
+    },
+    "owner": "huseyin.deniz"
+  }
+}
