@@ -46,6 +46,7 @@ import {
   dayRange,
   shortClock,
   priceIsStale,
+  liquidationBuffer,
 } from "@/components/trade/tradeView";
 
 describe("msToNextHour", () => {
@@ -769,5 +770,71 @@ describe("priceIsStale", () => {
     expect(priceIsStale({ mid: null, ctxPrice: null, midsStale: true, ctxStale: false })).toBe(
       true
     );
+  });
+});
+
+describe("liquidationBuffer", () => {
+  // The real position off the market sheet: 0.00024 BTC long, $18.80 notional
+  // (mark ≈ 78,333), liquidation 66,888 — 14.6% of room.
+  const LIVE = { size: "0.00024", notionalValue: "18.80", liquidationPx: "66888.0" };
+
+  it("derives mark from notional over size", () => {
+    const buffer = liquidationBuffer(LIVE);
+    // (78333 − 66888) / 78333 ≈ 0.1461
+    expect(buffer?.fraction).toBeCloseTo(0.1461, 3);
+  });
+
+  it("reads the same for a short, whose liquidation sits ABOVE mark", () => {
+    // Direction is not a field here — the distance is absolute, so a short
+    // with its liquidation the same distance the other side must score alike.
+    const short = { size: "0.00024", notionalValue: "18.80", liquidationPx: "89778.0" };
+    expect(liquidationBuffer(short)?.fraction).toBeCloseTo(0.1461, 3);
+  });
+
+  it("empties the bar as liquidation approaches — a gauge, not a risk meter", () => {
+    const near = liquidationBuffer({ ...LIVE, liquidationPx: "78000" });
+    const far = liquidationBuffer({ ...LIVE, liquidationPx: "1" });
+    expect(near?.room).toBeLessThan(10);
+    // Beyond the scale's reach the bar is full, never over 100.
+    expect(far?.room).toBe(100);
+  });
+
+  it("moves the bar the same direction as its caption", () => {
+    // The bug this replaced: the bar filled toward liquidation while the
+    // caption counted away from it, so a 14.7% position showed a 70% bar.
+    const roomy = liquidationBuffer({ ...LIVE, liquidationPx: "50000" });
+    const tight = liquidationBuffer({ ...LIVE, liquidationPx: "75500" });
+    expect(roomy!.fraction).toBeGreaterThan(tight!.fraction);
+    expect(roomy!.room).toBeGreaterThan(tight!.room);
+  });
+
+  it("escalates severity as the room runs out", () => {
+    // 36% clear — green. Then 14.6% (the live position) and 3.6%.
+    expect(liquidationBuffer({ ...LIVE, liquidationPx: "50000" })?.severity).toBe("success");
+    expect(liquidationBuffer(LIVE)?.severity).toBe("warning");
+    expect(liquidationBuffer({ ...LIVE, liquidationPx: "75500" })?.severity).toBe("danger");
+  });
+
+  it("does not call a leveraged position safe just because it is in profit", () => {
+    // The live position is up 439%, and is still one bad day from liquidation.
+    // Green here would be the crying-wolf bug inverted.
+    expect(liquidationBuffer(LIVE)?.severity).not.toBe("success");
+  });
+
+  it("draws nothing when there is no liquidation price", () => {
+    // 410 of 1,044 mainnet positions. A bar here would be pure decoration.
+    expect(liquidationBuffer({ ...LIVE, liquidationPx: null })).toBeNull();
+  });
+
+  it("refuses every degenerate input rather than inventing a bar", () => {
+    // Each has a real source: a size of "0" is a position the next snapshot
+    // drops, and an empty liquidation price is a wire value that never came.
+    expect(liquidationBuffer({ ...LIVE, size: "0" })).toBeNull();
+    expect(liquidationBuffer({ ...LIVE, size: "" })).toBeNull();
+    expect(liquidationBuffer({ ...LIVE, notionalValue: "" })).toBeNull();
+    expect(liquidationBuffer({ ...LIVE, notionalValue: "0" })).toBeNull();
+    expect(liquidationBuffer({ ...LIVE, liquidationPx: "" })).toBeNull();
+    expect(liquidationBuffer({ ...LIVE, liquidationPx: "-1" })).toBeNull();
+    expect(liquidationBuffer({ ...LIVE, liquidationPx: "abc" })).toBeNull();
   });
 });

@@ -38,7 +38,12 @@ import { PositionTpslSheet } from "@/components/trade/PositionTpslSheet";
 import { priceDecimalsOf } from "@/components/trade/orderForm";
 import type { TradableKind } from "@/components/trade/tradeView";
 import { displayNumber } from "@/components/common/display";
-import { useOpenOrders, usePositions, useSpotState } from "@/hyperliquid/hooks/account";
+import {
+  useOpenOrders,
+  usePositions,
+  useSpotState,
+  useHasAccountSnapshot,
+} from "@/hyperliquid/hooks/account";
 import { useOrderActions } from "@/hyperliquid/hooks/actions";
 import { useSpotPrices } from "@/hyperliquid/hooks/prices";
 import { useOutcomeNamer } from "@/hyperliquid/hooks/predictions";
@@ -106,6 +111,9 @@ export function MarketAccountSection({
   const canTrade = useCanTrade(session);
 
   const positions = usePositions(session.stores.account);
+  // "Nothing yet" and "nothing at all" are different answers — see
+  // `useHasAccountSnapshot`.
+  const accountRead = useHasAccountSnapshot(session.stores.account);
   const orders = useOpenOrders(session.stores.openOrders);
   const spot = useSpotState(session.stores.spot);
   const { prices } = useSpotPrices();
@@ -178,8 +186,11 @@ export function MarketAccountSection({
         </Tabs.List>
       </Tabs>
 
-      {/* The reference's filter row: dropdowns left, the bulk action right. */}
-      <View className="flex-row flex-wrap items-center gap-2">
+      {/* Filters right-aligned, under left-aligned tabs (user call,
+          2026-08-30). `justify-end` rather than a leading `flex-1` spacer:
+          this row wraps, and a spacer would claim the first line to itself the
+          moment the orders tab's three pills plus "Cancel all" overflow. */}
+      <View className="flex-row flex-wrap items-center justify-end gap-2">
         {tab === "positions" ? (
           <FilterMenu
             label="Side"
@@ -220,8 +231,6 @@ export function MarketAccountSection({
           />
         )}
 
-        <View className="flex-1" />
-
         {tab === "positions" && canTrade && shownPositions.length > 1 ? (
           <Button size="sm" variant="tertiary" onPress={() => setConfirmCloseAll(true)}>
             <Button.Label className="font-medium text-danger">Close All</Button.Label>
@@ -232,7 +241,12 @@ export function MarketAccountSection({
             label="Cancel all"
             confirmLabel={`Cancel ${shownOrders.length}?`}
             onConfirm={() => void actions.cancelAll(shownOrders)}
-            isBusy={false}
+            // The real busy state, not a literal `false`. Hardcoded, the button
+            // re-armed the instant it was pressed, so a second press fired a
+            // second `cancelAll` over oids the first had already cancelled —
+            // and a bulk cancel that hits a filled oid throws, so the duplicate
+            // reported a failure for work that had actually succeeded.
+            isBusy={actions.isBusy("cancel-all")}
             isDisabled={!canTrade}
           />
         ) : null}
@@ -249,7 +263,7 @@ export function MarketAccountSection({
       <Card className="py-0">
         {tab === "positions" ? (
           shownPositions.length === 0 ? (
-            <Empty text="No open positions." />
+            <Empty text={accountRead ? "No open positions." : "Loading positions…"} />
           ) : (
             <Divided>
               {shownPositions.map((position) => (
@@ -294,7 +308,9 @@ export function MarketAccountSection({
 
         {tab === "balances" ? (
           shownBalances.length === 0 ? (
-            <Empty text="No spot balances." />
+            // `useSpotState` already answers null for an unread store, so
+            // this one only needed asking.
+            <Empty text={spot === null ? "Loading balances…" : "No spot balances."} />
           ) : (
             <Divided>
               {shownBalances.map((balance) => (

@@ -46,6 +46,32 @@ import type { Fill } from "@/hyperliquid/types/domain";
  *   closing fill, so it is shown only when non-zero rather than as "$0.00" on
  *   every open.
  */
+/**
+ * A chip that cannot take a touch, inside a row that can.
+ *
+ * Every row in this file is rendered inside a `Pressable` (portfolio.tsx wraps
+ * `FillItem`, `LedgerItem` and their siblings), and a heroui `Chip` steals
+ * that tap TWICE over: its own `Pressable` swallows a finger, and its
+ * accessibility element swallows a synthesized one. The row then looks
+ * tappable and simply does nothing wherever a chip happens to sit.
+ *
+ * The same four props as `trade/accountRows.tsx`'s wrapper — `pointerEvents`
+ * for the finger, the two AX props for the element. Only the chips are made
+ * inert; the row's text stays readable.
+ */
+function InertChip({ children }: { children: JSX.Element }): JSX.Element {
+  return (
+    <View
+      className="pointer-events-none"
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
+      {children}
+    </View>
+  );
+}
+
 export function FillItem({
   fill,
   named,
@@ -71,19 +97,25 @@ export function FillItem({
             </Typography.Paragraph>
           </View>
           <View className="justify-center">
-            <Chip size="sm" color={fill.side === "buy" ? "success" : "danger"} variant="soft">
-              <Chip.Label className="font-medium">{fill.side}</Chip.Label>
-            </Chip>
+            <InertChip>
+              <Chip size="sm" color={fill.side === "buy" ? "success" : "danger"} variant="soft">
+                <Chip.Label className="font-medium">{fill.side}</Chip.Label>
+              </Chip>
+            </InertChip>
           </View>
           {fill.liquidation !== null ? (
-            <Chip size="sm" color="danger" variant="soft">
-              <Chip.Label className="font-medium">liquidation</Chip.Label>
-            </Chip>
+            <InertChip>
+              <Chip size="sm" color="danger" variant="soft">
+                <Chip.Label className="font-medium">liquidation</Chip.Label>
+              </Chip>
+            </InertChip>
           ) : null}
           {fill.source === "twapSlice" ? (
-            <Chip size="sm" variant="soft">
-              <Chip.Label className="font-medium">TWAP</Chip.Label>
-            </Chip>
+            <InertChip>
+              <Chip size="sm" variant="soft">
+                <Chip.Label className="font-medium">TWAP</Chip.Label>
+              </Chip>
+            </InertChip>
           ) : null}
         </View>
         <Typography.Paragraph
@@ -149,16 +181,20 @@ export function TwapItem({ row }: { row: TwapRow }): JSX.Element {
             </View>
             {state !== null ? (
               <View className="justify-center">
-                <Chip size="sm" color={state.isBuy ? "success" : "danger"} variant="soft">
-                  <Chip.Label className="font-medium">{state.isBuy ? "buy" : "sell"}</Chip.Label>
-                </Chip>
+                <InertChip>
+                  <Chip size="sm" color={state.isBuy ? "success" : "danger"} variant="soft">
+                    <Chip.Label className="font-medium">{state.isBuy ? "buy" : "sell"}</Chip.Label>
+                  </Chip>
+                </InertChip>
               </View>
             ) : null}
             {/* `status` verbatim: "activated", "finished", "terminated", and
                 whatever the exchange adds next. */}
-            <Chip size="sm" variant="soft">
-              <Chip.Label className="font-medium">{row.status}</Chip.Label>
-            </Chip>
+            <InertChip>
+              <Chip size="sm" variant="soft">
+                <Chip.Label className="font-medium">{row.status}</Chip.Label>
+              </Chip>
+            </InertChip>
           </View>
           <Typography.Paragraph
             className="text-xs text-muted tabular-nums font-normal"
@@ -228,9 +264,11 @@ export function LedgerItem({ row, viewer }: { row: LedgerRow; viewer: string }):
             </Typography.Paragraph>
           </View>
           <View className="justify-center">
-            <Chip size="sm" color={color} variant="soft">
-              <Chip.Label className="font-medium">{direction}</Chip.Label>
-            </Chip>
+            <InertChip>
+              <Chip size="sm" color={color} variant="soft">
+                <Chip.Label className="font-medium">{direction}</Chip.Label>
+              </Chip>
+            </InertChip>
           </View>
         </View>
         <Typography.Paragraph
@@ -285,9 +323,11 @@ export function OrderHistoryItem({
           <Typography.Paragraph className="font-medium leading-5" numberOfLines={1}>
             {named ? named.outcome.name : order.coin}
           </Typography.Paragraph>
-          <Chip size="sm" color={order.side === "buy" ? "success" : "danger"} variant="soft">
-            <Chip.Label className="font-medium">{order.side}</Chip.Label>
-          </Chip>
+          <InertChip>
+            <Chip size="sm" color={order.side === "buy" ? "success" : "danger"} variant="soft">
+              <Chip.Label className="font-medium">{order.side}</Chip.Label>
+            </Chip>
+          </InertChip>
         </View>
         <Typography.Paragraph
           className="text-xs text-muted tabular-nums font-normal"
@@ -299,11 +339,13 @@ export function OrderHistoryItem({
           {order.events.length > 1 ? ` · ${order.events.length} events` : ""}
         </Typography.Paragraph>
       </View>
-      <Chip size="sm" variant="soft" color={order.isTerminal ? "default" : "warning"}>
-        <Chip.Label className="font-medium">
-          {order.isTerminal ? order.finalStatus : "no final status"}
-        </Chip.Label>
-      </Chip>
+      <InertChip>
+        <Chip size="sm" variant="soft" color={order.isTerminal ? "default" : "warning"}>
+          <Chip.Label className="font-medium">
+            {order.isTerminal ? order.finalStatus : "no final status"}
+          </Chip.Label>
+        </Chip>
+      </InertChip>
     </View>
   );
 }
@@ -329,9 +371,11 @@ export function FundingItem({ row }: { row: FundingLedgerRow }): JSX.Element {
           <Typography.Paragraph className="font-medium leading-5" numberOfLines={1}>
             {row.coin}
           </Typography.Paragraph>
-          <Chip size="sm" color={received ? "success" : "danger"} variant="soft">
-            <Chip.Label className="font-medium">{received ? "received" : "paid"}</Chip.Label>
-          </Chip>
+          <InertChip>
+            <Chip size="sm" color={received ? "success" : "danger"} variant="soft">
+              <Chip.Label className="font-medium">{received ? "received" : "paid"}</Chip.Label>
+            </Chip>
+          </InertChip>
         </View>
         <Typography.Paragraph
           className="text-xs text-muted tabular-nums font-normal"

@@ -389,6 +389,11 @@ function ActivityBody({
   const ready = state.kind === "ready";
   const everything = ready ? renderRows(state.value.data, members) : [];
   const missing = ready ? state.value.missing : [];
+  // Distinct from `missing`: that is "a strategy could not be read at all",
+  // this is "we read it and the exchange holds more than fits one page". The
+  // flag was being computed upstream and discarded here, so a vault with more
+  // rows than a page showed a subset while the card implied completeness.
+  const truncated = ready && state.value.truncated;
 
   // Four tabs have a REAL taxonomy the official page spells out; the rest get
   // the adaptive flag filter, whose categories are whatever the wire sent.
@@ -435,7 +440,7 @@ function ActivityBody({
           horizontal
           showsHorizontalScrollIndicator={false}
           className="flex-1"
-          contentContainerClassName="flex-row items-center gap-2 pr-2"
+          contentContainerClassName="grow flex-row items-center justify-end gap-2 pr-2"
           keyboardShouldPersistTaps="handled"
         >
           {/* TWAP's three views change WHICH endpoint is read, so they lead
@@ -511,6 +516,12 @@ function ActivityBody({
             <Typography.Paragraph className="text-xs text-warning font-normal">
               {missing.length} {missing.length === 1 ? "strategy" : "strategies"} could not be read
               — this feed is incomplete.
+            </Typography.Paragraph>
+          ) : null}
+
+          {truncated ? (
+            <Typography.Paragraph className="text-xs text-muted font-normal">
+              Showing the most recent rows — there are more than fit one page.
             </Typography.Paragraph>
           ) : null}
 

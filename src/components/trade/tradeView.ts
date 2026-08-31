@@ -746,3 +746,88 @@ export function priceIsStale(sources: {
   if (sources.ctxPrice !== null) return sources.ctxStale;
   return sources.midsStale;
 }
+
+// ---------------------------------------------------------------------------
+// Liquidation buffer
+// ---------------------------------------------------------------------------
+
+/**
+ * Below this much room to liquidation the bar turns amber; below the second,
+ * red. Judgment calls, and stated as such — no exchange publishes a "getting
+ * close" number — but they are keyed to how far a crypto perp actually moves
+ * rather than picked for looks: **15% is a bad day** and **5% is a single
+ * volatile hour**. The consequence is deliberate and worth knowing before
+ * anyone "fixes" it: a position 14% clear reads amber, not green, because a
+ * 14% drawdown would in fact liquidate it.
+ */
+const BUFFER_WARNING = 0.15;
+const BUFFER_DANGER = 0.05;
+
+/**
+ * The buffer at which the bar reads FULL. Anything further from liquidation
+ * than this is simply "safe" — a scale that kept extending would spend its
+ * whole range on positions in no danger and compress the ones that are.
+ */
+const BUFFER_FULL_SCALE = 0.5;
+
+export interface LiquidationBuffer {
+  /** Room to liquidation as a fraction of mark: `|mark − liq| / mark`. */
+  fraction: number;
+  /**
+   * What a bar should fill: 100 = plenty of room, 0 = at the liquidation
+   * price. A **fuel gauge, not a risk meter** — it was written the other way
+   * up first, and a 70%-full bar sat above the words "14.7% from
+   * liquidation", which is two contradictory readings of one number. Emptying
+   * as danger rises means the bar and its caption fall together.
+   */
+  room: number;
+  severity: "success" | "warning" | "danger";
+}
+
+/**
+ * How much room a position has before liquidation.
+ *
+ * **Mark is derived, not read.** `Position` carries no mark price; it carries
+ * `notionalValue`, which the wire defines as `|szi| × markPx`, so mark is that
+ * over size. Division, hence `BigNumber` — and a guard on every degenerate
+ * input, because each one has a plausible source: size is "0" for a position
+ * the snapshot is about to drop, and a liquidation price can arrive as the
+ * empty string.
+ *
+ * Returns `null` whenever the answer would be invented. A position with no
+ * liquidation price is the COMMON case (410 of 1,044 mainnet positions), and
+ * a bar drawn for one of those would be pure decoration.
+ */
+export function liquidationBuffer(position: {
+  size: string;
+  notionalValue: string;
+  liquidationPx: string | null;
+}): LiquidationBuffer | null {
+  if (position.liquidationPx === null) return null;
+
+  // `toBigNumber` answers NaN, never null, for anything it cannot parse.
+  const size = toBigNumber(position.size).abs();
+  const notional = toBigNumber(position.notionalValue).abs();
+  const liq = toBigNumber(position.liquidationPx);
+
+  // A negative liquidation price is the one bad input that survives the
+  // arithmetic looking healthy: |mark − (−1)| / mark is a perfectly finite
+  // ~1.0, which would report a nonsense row as the safest on screen.
+  if (liq.isNegative()) return null;
+
+  const mark = notional.dividedBy(size);
+  const fraction = mark.minus(liq).abs().dividedBy(mark).toNumber();
+
+  // ONE finiteness test covers every other degenerate input, and explicit
+  // guards for them were written, verified to match nothing, and deleted: an
+  // unparsable string is already NaN, a zero size makes `mark` Infinite, a
+  // zero notional makes it zero — and each propagates to a non-finite
+  // `fraction` right here. See the guard note in CLAUDE.md.
+  if (!Number.isFinite(fraction)) return null;
+
+  const room = Math.min(fraction / BUFFER_FULL_SCALE, 1) * 100;
+  const severity =
+    fraction >= BUFFER_WARNING ? "success" : fraction >= BUFFER_DANGER ? "warning" : "danger";
+
+  return { fraction, room, severity };
+}

@@ -9,7 +9,7 @@
  * classes `signColor` uses elsewhere.
  */
 
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 import { View } from "react-native";
 import { Surface, Typography } from "heroui-native";
 
@@ -25,10 +25,20 @@ function toneClass(tone: StatTileData["tone"]): string {
 export function StatTile({
   tile,
   dimmed = false,
+  suffix,
 }: {
   tile: StatTileData;
   /** Stale live source: last-known values dim rather than blank. */
   dimmed?: boolean;
+  /**
+   * Rendered under the value, for a fact the value cannot carry on its own.
+   *
+   * Funding is the case it exists for: the rate is only half the answer, since
+   * it is charged on the hour and "+0.00125%" says nothing about how soon.
+   * Kept OUT of {@link StatTileData} — that is a pure view model, and a
+   * ReactNode in it would make the tile data un-testable and un-serialisable.
+   */
+  suffix?: ReactNode;
 }): JSX.Element {
   return (
     <Surface variant="secondary" className="flex-1 gap-1 rounded-xl px-3 py-3">
@@ -43,6 +53,7 @@ export function StatTile({
       >
         {tile.value ?? "--"}
       </Typography.Paragraph>
+      {suffix}
     </Surface>
   );
 }
@@ -56,9 +67,12 @@ export function StatTile({
 export function StatTileGrid({
   tiles,
   dimmed = false,
+  suffixFor,
 }: {
   tiles: readonly StatTileData[];
   dimmed?: boolean;
+  /** Per-tile extra content — see {@link StatTile}'s `suffix`. */
+  suffixFor?: (tile: StatTileData) => ReactNode;
 }): JSX.Element {
   const rows: StatTileData[][] = [];
   for (let i = 0; i < tiles.length; i += 2) {
@@ -69,7 +83,7 @@ export function StatTileGrid({
       {rows.map((pair) => (
         <View key={pair[0]!.label} className="flex-row gap-2">
           {pair.map((tile) => (
-            <StatTile key={tile.label} tile={tile} dimmed={dimmed} />
+            <StatTile key={tile.label} tile={tile} dimmed={dimmed} suffix={suffixFor?.(tile)} />
           ))}
         </View>
       ))}

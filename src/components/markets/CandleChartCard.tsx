@@ -43,7 +43,6 @@ import { readableTextColor, tokenColor } from "@/theme/tokenColor";
 
 import { readChartPrefs, writeChartPrefs, type ChartPrefs } from "@/components/markets/chartPrefs";
 import { ChartSettingsSheet } from "@/components/markets/ChartSettingsSheet";
-
 import {
   DETAIL_INTERVALS,
   formingToCandlePoint,
@@ -52,6 +51,9 @@ import {
 import type { CandleSeriesFeed } from "@/hyperliquid/hooks/markets";
 import { intervalSeconds } from "@/hyperliquid/state/candles";
 import type { CandleInterval } from "@/hyperliquid/types/domain";
+
+/** Which plot the card is drawing. */
+export type ChartMode = "candle" | "line";
 
 // Buckets visible at once now come from `ChartPrefs.bars` — a setting, not a
 // constant. 300 are seeded; the rest are a pan away.
@@ -127,7 +129,7 @@ export function CandleChartCard({
   // line↔candle morph one tap away. The line/data pair is ALREADY populated
   // for candle mode (see the SharedValue contract above), so the toggle costs
   // nothing extra.
-  const [mode, setMode] = useState<"candle" | "line">("candle");
+  const [mode, setMode] = useState<ChartMode>("candle");
   // Lazy read once per mount; every change writes through, so the next mount
   // opens where this one left off.
   const [prefs, setPrefs] = useState<ChartPrefs>(() => readChartPrefs());
@@ -224,10 +226,14 @@ export function CandleChartCard({
               nonNegative
               momentum={prefs.momentum}
               leftEdgeFade={prefs.leftEdgeFade}
+              xAxis={prefs.timeAxis}
+              valueLine={prefs.priceLine}
+              scrub={prefs.scrub}
+              zoom={prefs.zoom}
               {...(mode === "line" ? { gradient: prefs.gradient, dot: { ring: true } } : {})}
               {...(asProbability ? { maxValue: 1, formatValue: formatProbabilityValue } : {})}
               formatTime={seconds >= 86_400 ? formatBucketTimeDaily : formatBucketTimeIntraday}
-              timeScroll
+              timeScroll={prefs.timeScroll}
               onReachStart={feed.loadOlder}
               loading={feed.seed === "loading"}
               theme={colorScheme === "light" ? "light" : "dark"}
@@ -325,6 +331,7 @@ export function CandleChartCard({
         onOpenChange={setSettingsOpen}
         prefs={prefs}
         onChange={applyPrefs}
+        mode={mode}
       />
     </View>
   );

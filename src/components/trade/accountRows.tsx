@@ -13,9 +13,27 @@
  * rule is on record twice: *plain heroui components, no custom styling beyond
  * size*. So a position is a stack of **label-left / value-right lines** — the
  * exact anatomy the market Info list and the order form already use — under a
- * plain header (coin + side chip, PnL right), with plain small buttons in a
- * row beneath. No rails, no uppercase micro-labels, no bespoke grids: the
- * first "richer" attempt shipped all three and read as generated filler.
+ * plain header (coin + side chip, PnL right). No rails, no uppercase
+ * micro-labels, no bespoke grids: the first "richer" attempt shipped all three
+ * and read as generated filler.
+ *
+ * ## Fourth pass, 2026-08-30
+ *
+ * Two things the user called out, and the rule that decided both: **add
+ * information, never ornament.**
+ *
+ * The actions now span the card. They were small right-aligned pills, which on
+ * a cross position — the majority — meant a single 70pt button marooned under
+ * a full-width card.
+ *
+ * Liquidation became a bar. It had been a sixth fact line printed in red on
+ * every position, which is not a warning: a colour that never varies carries
+ * no information. `liquidationBuffer` computes the room left and the bar is
+ * tinted by it, so red now means close. It reuses the partial-fill bar's
+ * anatomy from the open-order row below rather than inventing a device, and it
+ * draws nothing at all when the position has no liquidation price — which is
+ * the common case, and where a bar would be exactly the filler that got the
+ * first attempt rejected.
  */
 
 import type { JSX } from "react";
@@ -26,6 +44,7 @@ import { ProgressBar } from "heroui-native-pro";
 import { ConfirmButton } from "@/components/portfolio/ConfirmButton";
 import { CoinBadge, Usd, UsdLabel } from "@/components/portfolio/primitives";
 import { displayNumber, formatWirePrice, trendOf } from "@/components/common/display";
+import { liquidationBuffer } from "@/components/trade/tradeView";
 import type { NamedOutcome } from "@/hyperliquid/hooks/predictions";
 import { pnlOf, valueOf, type SpotPrices } from "@/hyperliquid/hooks/prices";
 import type { UnconfirmedOrder } from "@/hyperliquid/state/openOrders";
@@ -100,6 +119,7 @@ export function PositionItem({
   const pnlTrend = trendOf(position.unrealizedPnl);
   const pnlClass = pnlTrend === "down" ? "text-danger" : "text-success";
   const roe = (displayNumber(position.returnOnEquity) * 100).toFixed(1);
+  const buffer = liquidationBuffer(position);
 
   return (
     <Pressable accessible={false} className="gap-3 py-3" onPress={onOpenDetail}>
@@ -136,8 +156,29 @@ export function PositionItem({
         <FactLine label="Value" value={<UsdLabel value={position.notionalValue} />} />
         <FactLine label="Entry price" value={position.entryPxDisplay} />
         <FactLine
-          label="Liq. price"
-          value={
+          label={`Margin (${position.marginMode})`}
+          value={<UsdLabel value={position.marginUsed} />}
+        />
+      </View>
+
+      {/* Liquidation, as room left rather than a number to interpret.
+          This was a sixth fact line, permanently red. Red on every position
+          including one 40% clear of liquidation is crying wolf — the colour
+          stopped carrying information the moment it never varied. So the
+          price keeps its line, and a bar under it says how close that price
+          actually is, tinted by `liquidationBuffer`'s severity.
+
+          The bar is the SAME anatomy the partial-fill bar below already uses,
+          not a new device — and it renders only when the buffer is real. A
+          position with no liquidation price (the common case) draws nothing;
+          an invented bar there would be the decoration this file's header
+          warns about. */}
+      {buffer === null ? (
+        <FactLine label="Liq. price" value="--" />
+      ) : (
+        <View className="gap-1.5">
+          <FactLine
+            label="Liq. price"
             // Significant figures, never a fixed fraction cap — see
             // `formatWirePrice`. A `maximumFractionDigits: 1` used to sit here
             // and rendered a real 0.1534 liquidation price as "0.2" (and 0.04
@@ -145,31 +186,49 @@ export function PositionItem({
             // decides whether to add margin or close; rendering the wire value
             // raw instead gave "66879.2151898734", because a server-computed
             // price carries the whole float.
-            position.liquidationPx === null ? "--" : formatWirePrice(position.liquidationPx)
-          }
-          tone={position.liquidationPx === null ? undefined : "danger"}
-        />
-        <FactLine
-          label={`Margin (${position.marginMode})`}
-          value={<UsdLabel value={position.marginUsed} />}
-        />
-      </View>
+            value={formatWirePrice(position.liquidationPx ?? "")}
+            // Red for danger ONLY. The bar already carries warning in amber,
+            // and a red number over an amber bar states two different
+            // severities for one fact.
+            tone={buffer.severity === "danger" ? "danger" : undefined}
+          />
+          <ProgressBar value={buffer.room} size="sm" color={buffer.severity}>
+            <ProgressBar.Track>
+              <ProgressBar.Fill />
+            </ProgressBar.Track>
+          </ProgressBar>
+          <Typography.Paragraph className="text-xs text-muted tabular-nums font-normal">
+            {`${(buffer.fraction * 100).toFixed(1)}% from liquidation`}
+          </Typography.Paragraph>
+        </View>
+      )}
 
-      {/* Plain small buttons, right-aligned. The armed label names the size:
-          "Close?" beside several rows does not say which one is armed. */}
-      <View className="flex-row items-center justify-end gap-2">
+      {/* Full width, split evenly. These were small right-aligned pills, and
+          on a cross position — where the Margin button never renders — that
+          left one 70pt button alone under a full-width card with a hand's
+          width of empty space beside it (user call, 2026-08-30). A card action
+          spans its card; two of them share it. The `flex-1` wrappers are what
+          stretch the buttons, since neither takes a width of its own.
+
+          The armed label still names the size: "Close?" beside several rows
+          does not say which one is armed. */}
+      <View className="flex-row items-center gap-2">
         {onAdjustMargin === undefined || position.marginMode !== "isolated" || !canTrade ? null : (
-          <Button size="sm" variant="tertiary" onPress={onAdjustMargin}>
-            <Button.Label className="font-medium">Margin</Button.Label>
-          </Button>
+          <View className="flex-1">
+            <Button size="sm" variant="tertiary" onPress={onAdjustMargin}>
+              <Button.Label className="font-medium">Margin</Button.Label>
+            </Button>
+          </View>
         )}
-        <ConfirmButton
-          label="Close"
-          confirmLabel={`Close ${position.size}?`}
-          onConfirm={onClose}
-          isBusy={isBusy}
-          isDisabled={!canTrade}
-        />
+        <View className="flex-1">
+          <ConfirmButton
+            label="Close"
+            confirmLabel={`Close ${position.size}?`}
+            onConfirm={onClose}
+            isBusy={isBusy}
+            isDisabled={!canTrade}
+          />
+        </View>
       </View>
     </Pressable>
   );
