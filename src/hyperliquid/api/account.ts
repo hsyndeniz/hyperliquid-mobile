@@ -227,8 +227,20 @@ export async function fetchFillsPage(
     value: {
       fills,
       hasMore,
-      // +1ms so the last row is not returned again; the range is inclusive.
-      nextStartTime: hasMore && newest > 0 ? newest + 1 : null,
+      // The newest row's OWN time, NOT `+ 1`.
+      //
+      // `startTime` is inclusive, so `+ 1` avoided repeating the boundary row
+      // — and skipped every OTHER fill sharing that millisecond, which is
+      // exactly where the page cap tends to cut. `history/fills.ts` already
+      // walks this way (`startTime = last.time`) and drops the repeat with a
+      // `seen` set keyed on `fill.key`; this matches it, and the ledger page
+      // was corrected the same way.
+      //
+      // CONTRACT for anyone who starts using this: the boundary row comes back
+      // again, so dedupe by `fill.key` (oid + tid) and stop when a page adds
+      // nothing. Today the only caller reads a single page and ignores this
+      // field entirely.
+      nextStartTime: hasMore && newest > 0 ? newest : null,
     },
     deferred: false,
   };

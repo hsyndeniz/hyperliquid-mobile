@@ -168,6 +168,21 @@ export interface MarketFeedOptions {
 interface KeyEntry {
   target: SubscriptionTarget;
   listeners: Set<MarketListener>;
+  /**
+   * Whether this key currently has, or is getting, a live subscription.
+   *
+   * Tracked because "does it need subscribing?" was inferred from
+   * `listeners.size === 1`, which is only the same question when the first
+   * subscribe SUCCEEDS. When it failed, the entry stayed in the map with its
+   * listener and no live handle, and every later listener saw a size above one
+   * and skipped the attempt — so the key served nothing until a transport
+   * rebuild happened to come along. A market card opened during one dropped
+   * frame stayed empty for the rest of the session.
+   *
+   * `pending` exists so two listeners arriving in the same tick do not both
+   * fire a subscribe for the same key.
+   */
+  state: "idle" | "pending" | "live";
 }
 
 export class MarketFeed {
@@ -211,14 +226,28 @@ export class MarketFeed {
     const key = subscriptionKey(target);
     let entry = this.byKey.get(key);
     if (!entry) {
-      entry = { target, listeners: new Set() };
+      entry = { target, listeners: new Set(), state: "idle" };
       this.byKey.set(key, entry);
     }
     entry.listeners.add(listener);
-    if (entry.listeners.size === 1) {
-      void this.registry.add(target).catch((error) => {
-        logger.warn("marketFeed.subscribe_failed", { context: { key }, error });
-      });
+    // Attempt whenever nothing is live or in flight — NOT only for the first
+    // listener. A failed subscribe leaves the entry `idle`, so the next
+    // listener to arrive retries it rather than inheriting a dead key.
+    if (entry.state === "idle") {
+      const attempt = entry;
+      attempt.state = "pending";
+      void this.registry
+        .add(target)
+        .then(() => {
+          // Only if this entry is still the live one: a close-then-reopen in
+          // the interim replaces it, and marking the old object would strand
+          // the new one at `pending` forever.
+          if (this.byKey.get(key) === attempt) attempt.state = "live";
+        })
+        .catch((error) => {
+          if (this.byKey.get(key) === attempt) attempt.state = "idle";
+          logger.warn("marketFeed.subscribe_failed", { context: { key }, error });
+        });
     }
 
     let closed = false;
@@ -246,9 +275,15 @@ export class MarketFeed {
   async rebuild(): Promise<void> {
     await this.registry.releaseAll();
     const entries = [...this.byKey.entries()];
+    for (const [, entry] of entries) entry.state = "pending";
     const results = await Promise.allSettled(
       entries.map(([, entry]) => this.registry.add(entry.target))
     );
+    // A key whose re-add failed goes back to `idle`, so the next listener to
+    // open it retries — rather than waiting for another rebuild.
+    entries.forEach(([, entry], index) => {
+      entry.state = results[index].status === "fulfilled" ? "live" : "idle";
+    });
     // Counted, not assumed — the same rule as `reconcileWithin`: one dead
     // channel must not fail the whole rebuild, but the log must say which.
     const failed = results.flatMap((result, index) =>

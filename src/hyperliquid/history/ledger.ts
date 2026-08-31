@@ -401,7 +401,20 @@ export async function fetchLedgerPage(params: {
   return {
     rows,
     hasMore,
-    nextStartTime: hasMore && rows.length > 0 ? rows[rows.length - 1].time + 1 : null,
+    // The last row's OWN timestamp, not `+ 1`.
+    //
+    // The endpoint's `startTime` is inclusive, so `+ 1` was there to stop the
+    // last row repeating on the next page. It also skips every OTHER row that
+    // shares that millisecond — and the page boundary is exactly where a tie is
+    // most likely, because the cap cuts wherever it lands rather than at a gap
+    // in time. Those rows were dropped silently: no error, no `hasMore` change,
+    // just a ledger entry the user never sees.
+    //
+    // Re-reading the boundary millisecond is the safe direction. It costs one
+    // duplicate row per page, and the callers already merge by identity
+    // (`mergeCandles`' rule, applied here by the ledger's own dedupe) rather
+    // than by assuming the pages are disjoint.
+    nextStartTime: hasMore && rows.length > 0 ? rows[rows.length - 1].time : null,
   };
 }
 

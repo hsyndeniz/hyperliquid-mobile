@@ -51,10 +51,19 @@ describe("the ledger's paging trap", () => {
       startTime: 0,
     });
     expect(page.hasMore).toBe(true);
-    // +1ms, because both bounds are INCLUSIVE — reusing the last timestamp
-    // re-reads that row, and skipping past it drops its same-millisecond
-    // siblings (up to 10 observed sharing one).
-    expect(page.nextStartTime).toBe(1_000 + LEDGER_PAGE_CAP - 1 + 1);
+    // The last row's OWN time, NOT `+ 1`.
+    //
+    // Both bounds are inclusive, so the choice is between re-reading the last
+    // row and skipping past it. `+ 1` skipped it — and with it every OTHER row
+    // sharing that millisecond, which is exactly where the loss bites: the cap
+    // cuts wherever it lands rather than at a gap in time, and `mergeLedger`'s
+    // own note records up to ten rows in one millisecond. Those rows were
+    // dropped with no error and no change to `hasMore`.
+    //
+    // Re-reading costs one duplicate, which `mergeLedger` dedupes by key, and
+    // the walk carries a no-progress guard so a page that dedupes away
+    // entirely terminates instead of refetching forever.
+    expect(page.nextStartTime).toBe(1_000 + LEDGER_PAGE_CAP - 1);
   });
 
   it("seeds from the NEWEST end by omitting startTime entirely", async () => {

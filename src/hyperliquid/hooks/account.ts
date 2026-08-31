@@ -62,6 +62,22 @@ export function usePositions(store: AccountStore): readonly Position[] {
 }
 
 /**
+ * Has an account snapshot arrived at all?
+ *
+ * `usePositions` answers `[]` both for "the exchange says you hold nothing"
+ * and for "nothing has been read yet", because it collapses a null snapshot
+ * into the empty array. Those are opposite facts to a trader: one means flat,
+ * the other means unknown, and a screen that renders "No open positions" over
+ * the second is asserting something it has not been told.
+ */
+export function useHasAccountSnapshot(store: AccountStore): boolean {
+  return useStoreValue(
+    store,
+    useCallback((s: AccountStore) => s.read() !== null, [])
+  );
+}
+
+/**
  * One coin's position, or `null` when it is closed.
  *
  * The per-row subscription. Every row wakes on every push, but React bails out

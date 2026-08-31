@@ -217,6 +217,59 @@ describe("MarketFeed refcount", () => {
   });
 });
 
+describe("MarketFeed recovers from a failed subscribe", () => {
+  it("a later listener retries a key whose first subscribe failed", async () => {
+    // The wedge: "does this key need subscribing?" used to be inferred from
+    // `listeners.size === 1`, which only asks the right question when the
+    // first subscribe SUCCEEDS. On failure the entry stayed in the map with a
+    // listener and no live handle, so every later listener saw a size above
+    // one and skipped the attempt — the key served nothing until a transport
+    // rebuild happened along. A market card opened during one dropped frame
+    // stayed empty for the rest of the session.
+    const fake = fakeApi("flaky");
+    let failNext = true;
+    const api = {
+      ...fake.api,
+      candle: async (params: unknown, listener: (data: unknown) => void) => {
+        if (failNext) {
+          failNext = false;
+          throw new Error("socket died mid-subscribe");
+        }
+        return fake.api.candle(params, listener);
+      },
+    };
+    const feed = new MarketFeed({ api: () => api as unknown as typeof fake.api });
+
+    const first = collector();
+    feed.open(btc1m(), first.listener);
+    await tick();
+    // Nothing live: the attempt threw.
+    expect(fake.calls).toHaveLength(0);
+
+    // A second listener on the SAME key must try again rather than assume the
+    // first one succeeded.
+    const second = collector();
+    feed.open(btc1m(), second.listener);
+    await tick();
+
+    expect(fake.calls).toHaveLength(1);
+    expect(fake.calls[0].params).toEqual({ coin: "BTC", interval: "1m" });
+  });
+
+  it("does not double-subscribe when two listeners arrive in the same tick", async () => {
+    // The other half: retrying on every `idle` must not fire twice while an
+    // attempt is still in flight.
+    const fake = fakeApi("same-tick");
+    const feed = new MarketFeed({ api: () => fake.api });
+
+    feed.open(btc1m(), collector().listener);
+    feed.open(btc1m(), collector().listener);
+    await tick();
+
+    expect(fake.calls).toHaveLength(1);
+  });
+});
+
 describe("MarketFeed fanout", () => {
   it("routes an event only to the listeners of its key, scoped and stamped", async () => {
     const fake = fakeApi("only");

@@ -279,12 +279,21 @@ export function useLedger(user: Hex | null): {
           setOlder({ ...walk, user, busy: false });
           return;
         }
+        const merged = mergeLedger(walk.rows, page.rows);
         setOlder({
           user,
-          rows: mergeLedger(walk.rows, page.rows),
+          rows: merged,
           cursor: page.nextStartTime ?? walk.cursor,
           // A short page means everything up to the seed is now held.
-          done: !page.hasMore,
+          //
+          // The second clause is the termination guard for the cursor's
+          // boundary-millisecond overlap: `nextStartTime` re-reads the last
+          // row's own timestamp rather than skipping past it (so rows sharing
+          // that millisecond are not silently dropped), which means a page can
+          // legitimately return rows already held. If a whole page dedupes
+          // away, the walk is not advancing and must stop rather than fetch
+          // the same page forever.
+          done: !page.hasMore || merged.length === walk.rows.length,
           busy: false,
         });
       } catch (error) {

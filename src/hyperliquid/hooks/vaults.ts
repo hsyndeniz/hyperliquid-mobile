@@ -100,6 +100,22 @@ export const VAULT_LIST_TTL_MS = 15 * 60_000;
 /** Pull-to-refresh floor — a refresh inside this window is a no-op. */
 export const VAULT_LIST_REFRESH_FLOOR_MS = 30_000;
 
+/**
+ * How long the directory download may run before it is abandoned.
+ *
+ * The single-flight latch is what makes this necessary: while `inFlightList`
+ * is set, every later caller returns that same promise instead of starting its
+ * own. That is right for a 14 MB CDN blob — and it means a download that never
+ * settles wedges the vault list for the WHOLE SESSION, with no retry path and
+ * a spinner that never stops, because nothing else ever clears the latch.
+ *
+ * Generous rather than tight: this really can be a slow, large transfer on a
+ * poor connection, and aborting a download that would have finished is its own
+ * failure. The bound exists to guarantee the latch always clears, not to
+ * police throughput.
+ */
+export const VAULT_LIST_STALL_MS = 60_000;
+
 /** Matches `REST_CACHE_TTL_MS` deliberately: same remount-refetch failure. */
 export const VAULT_DETAIL_TTL_MS = 60_000;
 
@@ -138,6 +154,14 @@ async function ensureDirectory(env: HlEnv, force: boolean): Promise<void> {
   }
 
   const controller = new AbortController();
+  // Abandon a download that never settles, so the latch below cannot hold the
+  // vault list hostage for the rest of the session. Cleared in `finally`
+  // whatever happens, including the abort path.
+  let stall: ReturnType<typeof setTimeout> | null = setTimeout(() => {
+    stall = null;
+    logger.warn("vaults.list_stalled", { context: { env, afterMs: VAULT_LIST_STALL_MS } });
+    controller.abort();
+  }, VAULT_LIST_STALL_MS);
   const promise = (async () => {
     vaultDirectory.setFetchState({ isFetching: true, lastFailure: null });
     try {
@@ -146,8 +170,18 @@ async function ensureDirectory(env: HlEnv, force: boolean): Promise<void> {
       vaultDirectory.setFetchState({ isFetching: false, lastFailure: null });
     } catch (caught) {
       if (controller.signal.aborted) {
-        // Aborted by an env switch — not a failure to record.
-        vaultDirectory.setFetchState({ isFetching: false, lastFailure: null });
+        // Two ways to land here. An env switch is not a failure — the bytes
+        // were simply for the wrong network. A STALL is: recording it is what
+        // lets the screen offer a retry rather than showing an empty list as
+        // though the directory were genuinely empty. `stall === null` means the
+        // timer is the one that fired.
+        const stalled = stall === null;
+        vaultDirectory.setFetchState({
+          isFetching: false,
+          lastFailure: stalled
+            ? { env, message: "The vault list took too long to load.", atMs: Date.now() }
+            : null,
+        });
         return;
       }
       const error = toHlError(caught);
@@ -157,6 +191,7 @@ async function ensureDirectory(env: HlEnv, force: boolean): Promise<void> {
         lastFailure: { env, message: error.message, atMs: Date.now() },
       });
     } finally {
+      if (stall !== null) clearTimeout(stall);
       if (currentListFlight()?.controller === controller) inFlightList = null;
     }
   })();
@@ -777,6 +812,18 @@ export interface VaultActivityView {
   data: VaultActivityRows;
   /** Members whose page was declined — the feed is partial when non-empty. */
   missing: readonly Hex[];
+  /**
+   * True when at least one member returned a FULL page, so the exchange holds
+   * more rows than are shown.
+   *
+   * Distinct from `missing`, which is "we could not read this member at all".
+   * This is "we read it and there was more" — and it was being thrown away:
+   * `fetchOpenOrders` reports `truncated`, the seed carried it, and this hook
+   * dropped it on the floor while the card told the reader the feed was
+   * complete. A vault with more open orders than one page silently showed a
+   * subset as though it were everything.
+   */
+  truncated: boolean;
 }
 
 /**
@@ -850,17 +897,30 @@ export function useVaultActivity(
           value: {
             data: { kind: "balances", rows: balanceRows(family) },
             missing: family.missing,
+            // Synchronous, off the family snapshot already in memory — there
+            // is no page to be truncated.
+            truncated: false,
           },
         }
       : kind === "positions" && family !== null
         ? {
             kind: "ready",
-            value: { data: { kind: "positions", rows: family.positions }, missing: family.missing },
+            value: {
+              data: { kind: "positions", rows: family.positions },
+              missing: family.missing,
+              truncated: false,
+            },
           }
         : kind === "depositors" && detail !== null
           ? {
               kind: "ready",
-              value: { data: { kind: "depositors", rows: detail.followers.rows }, missing: [] },
+              value: {
+                data: { kind: "depositors", rows: detail.followers.rows },
+                missing: [],
+                // The follower page IS capped and the detail read says so —
+                // this is the one derived feed that can be short.
+                truncated: detail.followers.truncated,
+              },
             }
           : null;
 
@@ -939,6 +999,10 @@ async function readActivity(
   const addresses = familyAddresses(detail);
   const since = Date.now() - options.windowMs;
   const client = getInfoClient();
+  // Set by any member whose page came back full. Collected out here rather
+  // than threaded through `fanOutFamily`, whose contract is deliberately just
+  // "rows or null" — the flag is per-feed, not per-row.
+  let truncated = false;
 
   switch (kind) {
     case "openOrders": {
@@ -949,11 +1013,12 @@ async function readActivity(
             probe: client as unknown as Parameters<typeof fetchOpenOrders>[0]["probe"],
             user: address,
           });
+          if (seed.value?.truncated === true) truncated = true;
           return seed.deferred ? null : (seed.value?.rows ?? []);
         },
         (row) => row.placedAt
       );
-      return { data: { kind: "openOrders", rows }, missing };
+      return { data: { kind: "openOrders", rows }, missing, truncated };
     }
     case "trades": {
       const { rows, missing } = await fanOutFamily<Fill>(
@@ -967,11 +1032,12 @@ async function readActivity(
             startTime: since,
             aggregateByTime: options.aggregate,
           });
+          if (seed.value?.hasMore === true) truncated = true;
           return seed.deferred ? null : (seed.value?.fills ?? []);
         },
         (row) => row.time
       );
-      return { data: { kind: "trades", rows }, missing };
+      return { data: { kind: "trades", rows }, missing, truncated };
     }
     case "funding": {
       const { rows, missing } = await fanOutFamily<FundingLedgerRow>(
@@ -986,7 +1052,7 @@ async function readActivity(
         },
         (row) => row.time
       );
-      return { data: { kind: "funding", rows }, missing };
+      return { data: { kind: "funding", rows }, missing, truncated };
     }
     case "orderHistory": {
       const { rows, missing } = await fanOutFamily<OrderLifecycle>(
@@ -1009,7 +1075,7 @@ async function readActivity(
           }),
         (row) => row.lastAt
       );
-      return { data: { kind: "orderHistory", rows }, missing };
+      return { data: { kind: "orderHistory", rows }, missing, truncated };
     }
     case "twap": {
       // Fill History is a different endpoint — slice executions appear in no
@@ -1038,7 +1104,7 @@ async function readActivity(
           },
           (row) => row.time
         );
-        return { data: { kind: "twap", rows }, missing };
+        return { data: { kind: "twap", rows }, missing, truncated };
       }
 
       const { rows, missing } = await fanOutFamily<VaultTwapRow>(
@@ -1076,7 +1142,7 @@ async function readActivity(
         },
         (row) => row.time
       );
-      return { data: { kind: "twap", rows }, missing };
+      return { data: { kind: "twap", rows }, missing, truncated };
     }
     case "ledger": {
       const { rows, missing } = await fanOutFamily<LedgerRow>(
@@ -1088,17 +1154,20 @@ async function readActivity(
               user: address,
               startTime: since,
             });
+            // The ledger endpoint reports its own page cap; a full page means
+            // the exchange holds more than this window is showing.
+            if (page.hasMore) truncated = true;
             return page.rows;
           }),
         (row) => row.time
       );
-      return { data: { kind: "ledger", rows }, missing };
+      return { data: { kind: "ledger", rows }, missing, truncated };
     }
     case "balances":
     case "positions":
     case "depositors":
       // Derived in the hook; unreachable, and an empty feed is the safe answer
       // rather than a thrown error inside a cache fill.
-      return { data: { kind: "balances", rows: [] }, missing: [] };
+      return { data: { kind: "balances", rows: [] }, missing: [], truncated: false };
   }
 }
