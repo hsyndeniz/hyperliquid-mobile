@@ -27,19 +27,21 @@ import type { JSX } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 
 import { BookOpen } from "lucide-react-native";
 
 import { DetailSections } from "@/components/markets/DetailSections";
-import { MarketDetailHeader } from "@/components/markets/MarketDetailHeader";
+import {
+  MarketHeaderStar,
+  MarketHeaderTitle,
+  MarketPriceHero,
+} from "@/components/markets/MarketDetailHeader";
 import { OrderBookPanel } from "@/components/trade/OrderBookPanel";
-import { statIcon } from "@/components/markets/statIcon";
 import { FundingClock } from "@/components/markets/FundingClock";
 import { MarketAccountSection } from "@/components/trade/MarketAccountSection";
 import { Button, Card, Chip, Skeleton, Typography } from "heroui-native";
 
-import { GlassCta } from "@/components/common/glass";
 import { CandleChartCard } from "@/components/markets/CandleChartCard";
 import {
   aboutRows,
@@ -283,6 +285,34 @@ export default function MarketDetail(): JSX.Element {
 
   const title = first(params.symbol) ?? row?.symbol ?? outcome?.name ?? wireCoin;
 
+  // A prediction gets no trade button. The trade screen cannot submit an
+  // outcome order, and the pushed `#N` coin would even persist as the last
+  // market — so a fresh open would restore a screen that cannot work.
+  const canTrade = kind !== "prediction";
+
+  // The bar is set from the screen, like `vault/[address]`: the market's name
+  // is only resolvable here, out of the param, the market row, or a
+  // prediction's outcome — the route knows nothing but the wire coin.
+  //
+  // Identity and the pin live UP HERE rather than in the page, which used to
+  // repeat them directly under a bar already saying the same thing. Deps are
+  // the coin, its name and its kind — all fixed for a given market — so this
+  // runs once per market and the ticking price never reaches a native
+  // navigation item.
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      // `title` as well as `headerTitle`: the custom component owns what is
+      // DRAWN, but the plain string is what the route reports to
+      // accessibility and to anything reading the screen's name — without it
+      // both fell back to the route pattern, and the header announced itself
+      // as "market/[coin]".
+      title,
+      headerTitle: () => <MarketHeaderTitle wireCoin={wireCoin} symbol={title} kind={kind} />,
+      headerRight: () => <MarketHeaderStar wireCoin={wireCoin} symbol={title} />,
+    });
+  }, [navigation, wireCoin, title, kind]);
+
   // ------------------------------------------------------------------ tiles
   const perpTiles: StatTileData[] | null =
     kind === "perp"
@@ -314,21 +344,209 @@ export default function MarketDetail(): JSX.Element {
   // makes the open set the mount gate.
   const [openSections, setOpenSections] = useState<string[]>([]);
 
+  // Each section of this screen is built as a NAMED value before the
+  // return, not inlined into it. The page has three mutually exclusive
+  // kinds and a conditional CTA, and as inline ternaries the render was
+  // ~190 lines in which every block opened with `{x !== null ? (` and
+  // closed forty lines later with `) : null}` — you could not see the
+  // order of the page for the branches. Named, the return reads as the
+  // list of sections it is, and each condition is stated once, next to
+  // the markup it governs.
+
+  const perpSection =
+    perpTiles !== null ? (
+      <View className="gap-2">
+        <View className="flex-row items-center justify-between px-1">
+          <Typography.Paragraph className="text-sm text-muted font-normal">
+            Info
+          </Typography.Paragraph>
+          {perpFeed.isStale ? (
+            <Chip size="sm" color="warning" variant="soft">
+              <Chip.Label className="font-medium">stale</Chip.Label>
+            </Chip>
+          ) : null}
+        </View>
+        {/* One grouped list: the book as a disclosure row on top, the
+              fact rows in plain sight beneath — facts should not hide
+              behind a tap. The book stays a LIVE SUBSCRIPTION that only
+              runs while open; the open set is the mount gate. */}
+        <DetailSections
+          open={openSections}
+          onOpenChange={setOpenSections}
+          disclosures={[
+            {
+              value: "book",
+              icon: BookOpen,
+              label: "Order book",
+              content: (
+                <View className="px-4 pb-3" style={{ height: BOOK_PANEL_HEIGHT }}>
+                  <OrderBookPanel
+                    wireCoin={wireCoin}
+                    symbol={title}
+                    szDecimals={row?.szDecimals ?? null}
+                    marketType="perp"
+                    anchorPx={heroPx}
+                    env={env}
+                  />
+                </View>
+              ),
+            },
+          ]}
+        />
+
+        {/* The same tiles spot and prediction already use, so all three
+              market kinds read alike. Inside a Card, on `surface-secondary`
+              tiles — the Portfolio screen's anatomy. */}
+        <Card>
+          <StatTileGrid
+            tiles={perpTiles}
+            dimmed={perpFeed.isStale}
+            // Funding is the one fact whose "when" matters as much as its
+            // size: it is charged on the hour, and the rate alone cannot
+            // say how soon.
+            suffixFor={(tile) => (tile.label === "Funding / hr" ? <FundingClock /> : null)}
+          />
+        </Card>
+      </View>
+    ) : null;
+
+  const spotBook =
+    kind === "spot" ? (
+      <DetailSections
+        open={openSections}
+        onOpenChange={setOpenSections}
+        disclosures={[
+          {
+            value: "book",
+            icon: BookOpen,
+            label: "Order book",
+            content: (
+              <View className="px-4 pb-3" style={{ height: BOOK_PANEL_HEIGHT }}>
+                <OrderBookPanel
+                  wireCoin={wireCoin}
+                  symbol={title}
+                  szDecimals={row?.szDecimals ?? null}
+                  marketType="spot"
+                  anchorPx={heroPx}
+                  env={env}
+                />
+              </View>
+            ),
+          },
+        ]}
+      />
+    ) : null;
+
+  const spotStats =
+    spotTiles !== null ? (
+      <Card className="gap-3">
+        <Typography.Paragraph className="text-xs text-muted font-normal">
+          Spot stats
+        </Typography.Paragraph>
+        {raw.state.kind === "loading" ? (
+          // Loading is NOT "--": dashes mean "this source has no value",
+          // and the first visit was showing them for a read still in
+          // flight — a skeleton is the honest in-between.
+          <Skeleton className="h-20 w-full rounded-xl" />
+        ) : (
+          <StatTileGrid tiles={spotTiles} />
+        )}
+        <RawReadNotice state={raw.state} retry={raw.retry} />
+      </Card>
+    ) : null;
+
+  const spotAbout =
+    kind === "spot" && about.length > 0 ? (
+      <Card className="gap-3">
+        <Typography.Paragraph className="text-xs text-muted font-normal">
+          About
+        </Typography.Paragraph>
+        <StatTileGrid tiles={about} />
+      </Card>
+    ) : null;
+
+  const predictionSection =
+    kind === "prediction" ? (
+      <>
+        {outcome !== null && outcome.description !== "" ? (
+          // A disclosure row instead of the old More/Less button —
+          // expansion is what the row is for, and it is a bigger target
+          // than a tertiary button under four clipped lines.
+          <DetailSections
+            open={openSections}
+            onOpenChange={setOpenSections}
+            disclosures={[
+              {
+                value: "question",
+                icon: BookOpen,
+                label: "Question",
+                content: (
+                  <View className="px-4 pb-3">
+                    <Typography.Paragraph className="font-normal">
+                      {outcome.description}
+                    </Typography.Paragraph>
+                  </View>
+                ),
+              },
+            ]}
+          />
+        ) : null}
+
+        {sides.length > 0 ? (
+          <Card className="gap-3">
+            <Typography.Paragraph className="text-xs text-muted font-normal">
+              Sides
+            </Typography.Paragraph>
+            {sides.map((side) => (
+              <View key={side.wireCoin} className="flex-row items-center justify-between">
+                <Typography.Paragraph className="font-medium" numberOfLines={1}>
+                  {side.name}
+                </Typography.Paragraph>
+                <Typography.Paragraph className="font-semibold tabular-nums">
+                  {side.probability ?? "--"}
+                </Typography.Paragraph>
+              </View>
+            ))}
+            {/* The chart plots the route's side; the sides card names both. */}
+            <Typography.Paragraph className="text-xs text-muted font-normal">
+              Chart shows{" "}
+              {outcome?.sides.find((side) => side.wireCoin === wireCoin)?.name ?? wireCoin}
+            </Typography.Paragraph>
+          </Card>
+        ) : null}
+
+        {predictionTiles !== null ? (
+          <Card className="gap-3">
+            <Typography.Paragraph className="text-xs text-muted font-normal">
+              Market
+            </Typography.Paragraph>
+            <StatTileGrid tiles={predictionTiles} />
+            <RawReadNotice state={raw.state} retry={raw.retry} />
+          </Card>
+        ) : null}
+      </>
+    ) : null;
+
+  const tradeCta = canTrade ? (
+    <Button
+      className="w-full"
+      onPress={() => router.push({ pathname: "/order", params: { coin: wireCoin } })}
+    >
+      <Button.Label className="font-medium">Trade</Button.Label>
+    </Button>
+  ) : null;
+
   return (
-    // The sheet's FIRST page: no back affordance, because there is nothing
-    // behind it inside the sheet, and no top inset, because the sheet's own
-    // edge already sits below the status bar. The `pt-4` is the breathing
-    // room the old card's top pad provided — without it the coin badge butts
-    // against the sheet's rounded corner.
-    <View className="flex-1 bg-background pt-4">
-      {/* Identity and price on ONE line — see `MarketDetailHeader`. It replaces
-          both the title bar and the old stacked hero: this is the sheet's first
-          page, its height is finite, and two rows of chrome above the chart come
-          straight out of what is readable beneath it. */}
-      <View className="px-4 pb-1">
-        <MarketDetailHeader
-          wireCoin={wireCoin}
-          symbol={title}
+    // An ordinary pushed screen since the `(market)` group was dissolved: the
+    // platform header above carries the back control and the market's name,
+    // so the top pad that stood in for both while this was a sheet's
+    // chrome-less first page is gone with it.
+    <View className="flex-1 bg-background">
+      {/* Only the numbers now — the artwork, the pair name and the pin moved
+          into the navigation bar above, which was otherwise repeating them a
+          row apart. What is left is the one thing that ticks. */}
+      <View className="px-4 pt-2 pb-1">
+        <MarketPriceHero
           kind={kind}
           price={heroPx}
           isStale={heroStale}
@@ -336,10 +554,10 @@ export default function MarketDetail(): JSX.Element {
           trend={trend}
         />
       </View>
-      {/* A plain ScrollView. The sheet's dismiss gesture is UIKit's own now
-          and negotiates with scrolled content natively — drag at scroll-top
-          dismisses, anywhere else scrolls — so the transition-aware wrapper
-          went with the library. Styles are the resolved Tailwind steps. */}
+      {/* A plain ScrollView — the transition-aware wrapper went out with the
+          transitions library, and nothing since has needed it: this is an
+          ordinary pushed screen, so the back-swipe is the platform's own.
+          Styles are the resolved Tailwind steps. */}
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{
@@ -359,163 +577,19 @@ export default function MarketDetail(): JSX.Element {
         />
 
         {/* ------------------------------------------------------------ stats */}
-        {perpTiles !== null ? (
-          <View className="gap-2">
-            <View className="flex-row items-center justify-between px-1">
-              <Typography.Paragraph className="text-sm text-muted font-normal">
-                Info
-              </Typography.Paragraph>
-              {perpFeed.isStale ? (
-                <Chip size="sm" color="warning" variant="soft">
-                  <Chip.Label className="font-medium">stale</Chip.Label>
-                </Chip>
-              ) : null}
-            </View>
-            {/* One grouped list: the book as a disclosure row on top, the
-                fact rows in plain sight beneath — facts should not hide
-                behind a tap. The book stays a LIVE SUBSCRIPTION that only
-                runs while open; the open set is the mount gate. */}
-            <DetailSections
-              stale={perpFeed.isStale}
-              open={openSections}
-              onOpenChange={setOpenSections}
-              disclosures={[
-                {
-                  value: "book",
-                  icon: BookOpen,
-                  label: "Order book",
-                  content: (
-                    <View className="px-4 pb-3" style={{ height: BOOK_PANEL_HEIGHT }}>
-                      <OrderBookPanel
-                        wireCoin={wireCoin}
-                        symbol={title}
-                        szDecimals={row?.szDecimals ?? null}
-                        marketType="perp"
-                        anchorPx={heroPx}
-                        env={env}
-                      />
-                    </View>
-                  ),
-                },
-              ]}
-              rows={perpTiles.map((tile) => ({
-                icon: statIcon(tile.label),
-                label: tile.label,
-                value: tile.value,
-                tone: tile.tone,
-                // Funding is the one fact whose "when" matters as much as its
-                // size — it is paid on the hour, and the rate alone cannot
-                // say how soon.
-                suffix: tile.label === "Funding / hr" ? <FundingClock /> : undefined,
-              }))}
-            />
-          </View>
-        ) : null}
+        {perpSection}
 
-        {spotTiles !== null ? (
-          <Card className="gap-3">
-            <Typography.Paragraph className="text-xs text-muted font-normal">
-              Spot stats
-            </Typography.Paragraph>
-            {raw.state.kind === "loading" ? (
-              // Loading is NOT "--": dashes mean "this source has no value",
-              // and the first visit was showing them for a read still in
-              // flight — a skeleton is the honest in-between.
-              <Skeleton className="h-20 w-full rounded-xl" />
-            ) : (
-              <StatTileGrid tiles={spotTiles} />
-            )}
-            <RawReadNotice state={raw.state} retry={raw.retry} />
-          </Card>
-        ) : null}
+        {spotBook}
 
-        {kind === "spot" ? (
-          <DetailSections
-            open={openSections}
-            onOpenChange={setOpenSections}
-            disclosures={[
-              {
-                value: "book",
-                icon: BookOpen,
-                label: "Order book",
-                content: (
-                  <View className="px-4 pb-3" style={{ height: BOOK_PANEL_HEIGHT }}>
-                    <OrderBookPanel
-                      wireCoin={wireCoin}
-                      symbol={title}
-                      szDecimals={row?.szDecimals ?? null}
-                      marketType="spot"
-                      anchorPx={heroPx}
-                      env={env}
-                    />
-                  </View>
-                ),
-              },
-            ]}
-            rows={about.map((entry) => ({ label: entry.label, value: entry.value }))}
-          />
-        ) : null}
+        {spotStats}
 
-        {kind === "prediction" ? (
-          <>
-            {outcome !== null && outcome.description !== "" ? (
-              // A disclosure row instead of the old More/Less button —
-              // expansion is what the row is for, and it is a bigger target
-              // than a tertiary button under four clipped lines.
-              <DetailSections
-                open={openSections}
-                onOpenChange={setOpenSections}
-                disclosures={[
-                  {
-                    value: "question",
-                    icon: BookOpen,
-                    label: "Question",
-                    content: (
-                      <View className="px-4 pb-3">
-                        <Typography.Paragraph className="font-normal">
-                          {outcome.description}
-                        </Typography.Paragraph>
-                      </View>
-                    ),
-                  },
-                ]}
-              />
-            ) : null}
+        {/* The token's About facts, on the same tiles as its stats above —
+            they were the last label-left/value-right rows on this screen.
+            `AboutRow` is already `{label, value}`, which is `StatTile`'s
+            shape minus the tone it has no use for. */}
+        {spotAbout}
 
-            {sides.length > 0 ? (
-              <Card className="gap-3">
-                <Typography.Paragraph className="text-xs text-muted font-normal">
-                  Sides
-                </Typography.Paragraph>
-                {sides.map((side) => (
-                  <View key={side.wireCoin} className="flex-row items-center justify-between">
-                    <Typography.Paragraph className="font-medium" numberOfLines={1}>
-                      {side.name}
-                    </Typography.Paragraph>
-                    <Typography.Paragraph className="font-semibold tabular-nums">
-                      {side.probability ?? "--"}
-                    </Typography.Paragraph>
-                  </View>
-                ))}
-                {/* The chart plots the route's side; the sides card names both. */}
-                <Typography.Paragraph className="text-xs text-muted font-normal">
-                  Chart shows{" "}
-                  {outcome?.sides.find((side) => side.wireCoin === wireCoin)?.name ?? wireCoin}
-                </Typography.Paragraph>
-              </Card>
-            ) : null}
-
-            {predictionTiles !== null ? (
-              <Card className="gap-3">
-                <Typography.Paragraph className="text-xs text-muted font-normal">
-                  Market
-                </Typography.Paragraph>
-                <StatTileGrid tiles={predictionTiles} />
-                <RawReadNotice state={raw.state} retry={raw.retry} />
-              </Card>
-            ) : null}
-          </>
-        ) : null}
+        {predictionSection}
 
         {/* ------------------------------------------------------ account */}
         {/* Your position, orders and balance on THIS market — contextual
@@ -524,16 +598,9 @@ export default function MarketDetail(): JSX.Element {
             outcome market has no position or order shape these items read. */}
         {kind === "prediction" ? null : <MarketAccountSection kind={kind} coin={wireCoin} />}
         {/* The wire coin rides along so the trade screen lands on THIS market —
-          without it it opens on whatever was last traded. NOT rendered for a
-          prediction: the trade screen cannot submit an outcome order, and the
-          pushed "#N" coin would even persist as the last market, so a fresh
-          open would restore a broken screen. */}
-        {kind === "prediction" ? null : (
-          <GlassCta
-            label="Trade"
-            onPress={() => router.push({ pathname: "/order", params: { coin: wireCoin } })}
-          />
-        )}
+          without it it opens on whatever was last traded. See `canTrade` for
+          why a prediction has no button at all. */}
+        {tradeCta}
       </ScrollView>
     </View>
   );

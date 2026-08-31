@@ -37,6 +37,7 @@ import { Button, Chip, InputGroup, Skeleton, Tabs, Typography, useThemeColor } f
 import { Search, X } from "lucide-react-native";
 import { LiquidGlassContainerView } from "@callstack/liquid-glass";
 
+import { ScreenGradient } from "@/components/common/ScreenGradient";
 import { MarketHighlightCard } from "@/components/markets/MarketHighlightCard";
 import { MarketListRow } from "@/components/markets/MarketListRow";
 import { selectHighlights, summarizeMarkets } from "@/components/markets/marketsView";
@@ -238,9 +239,10 @@ function MarketsTab(): JSX.Element {
 
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: insets.top + 8 }}>
+      <ScreenGradient />
       {/* Fixed header: on a 1,309-row list, search and section controls must
           not scroll away with the rows. */}
-      <View className="gap-3 px-4 pb-3">
+      <View className="gap-3 px-4 pb-1">
         <View className="gap-1">
           <View className="flex-row items-center justify-between">
             <Typography.Heading className="font-bold">Markets</Typography.Heading>

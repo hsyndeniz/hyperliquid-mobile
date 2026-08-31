@@ -34,6 +34,7 @@ import Constants from "expo-constants";
 import { useFocusEffect } from "expo-router";
 import { Accordion, Typography } from "heroui-native";
 
+import { ScreenGradient } from "@/components/common/ScreenGradient";
 import { AccountSection } from "@/components/account/AccountSection";
 import { connectionMeasure, sessionPhase, walletMeasure } from "@/components/account/accountView";
 import { appearanceMeasure, resolveChoice } from "@/components/account/appearance";
@@ -112,94 +113,99 @@ function AccountTab(): JSX.Element {
         }`;
 
   return (
-    <ScrollView
-      className="flex-1 bg-background"
-      contentContainerClassName="gap-4 px-4"
-      contentContainerStyle={{
-        paddingTop: insets.top + 8,
-        paddingBottom: insets.bottom + TAB_BAR_CLEARANCE,
-      }}
-    >
-      <Typography.Heading className="font-bold">Account</Typography.Heading>
+    // The gradient cannot live inside the scroller — an absolute child of a
+    // ScrollView scrolls with the content and would slide off the top.
+    <View className="flex-1 bg-background">
+      <ScreenGradient />
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="gap-4 px-4"
+        contentContainerStyle={{
+          paddingTop: insets.top + 8,
+          paddingBottom: insets.bottom + TAB_BAR_CLEARANCE,
+        }}
+      >
+        <Typography.Heading className="font-bold">Account</Typography.Heading>
 
-      <IdentityHero
-        address={masterAddress}
-        env={env}
-        phase={sessionPhase(status)}
-        isLive={status === "ready"}
-        busy={status === "starting"}
-        onSignIn={() => void start()}
-        onSignOut={() => void stop()}
-      />
+        <IdentityHero
+          address={masterAddress}
+          env={env}
+          phase={sessionPhase(status)}
+          isLive={status === "ready"}
+          busy={status === "starting"}
+          onSignIn={() => void start()}
+          onSignOut={() => void stop()}
+        />
 
-      {/* `multiple`, not `single`: comparing the session's agent state against
+        {/* `multiple`, not `single`: comparing the session's agent state against
           the connection's budget is a real thing to do while debugging, and a
           single-open accordion closes one to answer the other. */}
-      <Accordion variant="surface" selectionMode="multiple">
-        <AccountSection value="session" title="Session" measure={sessionPhase(status)}>
-          <SessionCard
-            status={status}
-            error={error}
-            sessionState={sessionState}
-            actingAs={actingAs}
-            busy={status === "starting"}
-            onStartApprove={() => void start({ approveAgent: true, agentLabel: AGENT_LABEL })}
-          />
-        </AccountSection>
+        <Accordion variant="surface" selectionMode="multiple">
+          <AccountSection value="session" title="Session" measure={sessionPhase(status)}>
+            <SessionCard
+              status={status}
+              error={error}
+              sessionState={sessionState}
+              actingAs={actingAs}
+              busy={status === "starting"}
+              onStartApprove={() => void start({ approveAgent: true, agentLabel: AGENT_LABEL })}
+            />
+          </AccountSection>
 
-        <AccountSection
-          value="connection"
-          title="Connection"
-          measure={connectionMeasure(socket, used, weightBudget.capacity())}
-        >
-          <HealthCard used={used} resumeNote={resumeNote} />
-        </AccountSection>
+          <AccountSection
+            value="connection"
+            title="Connection"
+            measure={connectionMeasure(socket, used, weightBudget.capacity())}
+          >
+            <HealthCard used={used} resumeNote={resumeNote} />
+          </AccountSection>
 
-        <AccountSection value="wallet" title="Wallet" measure={walletMeasure(wallet)}>
-          <WalletCard wallet={wallet} onWalletChanged={refreshWallet} stopSession={stopSession} />
-        </AccountSection>
+          <AccountSection value="wallet" title="Wallet" measure={walletMeasure(wallet)}>
+            <WalletCard wallet={wallet} onWalletChanged={refreshWallet} stopSession={stopSession} />
+          </AccountSection>
 
-        {/* Above About and below Wallet: this is the one section here the user
+          {/* Above About and below Wallet: this is the one section here the user
             changes for themselves rather than reads, and About is the screen's
             footer — the build's own facts, which nothing follows. */}
-        <AccountSection
-          value="appearance"
-          title="Appearance"
-          measure={appearanceMeasure(
-            resolveChoice(theme, hasAdaptiveThemes),
-            theme === "light" ? "light" : "dark"
-          )}
-        >
-          <AppearanceCard />
-        </AccountSection>
-
-        <AccountSection
-          value="about"
-          title="About"
-          measure={{ label: Constants.expoConfig?.version ?? "dev", tone: "muted" }}
-        >
-          <InfoRow label="Network" value={env === "testnet" ? "Testnet" : "Mainnet"} />
-          <View className="flex-row items-start justify-between gap-4">
-            <Typography.Paragraph className="text-sm text-muted font-normal">
-              Builder
-            </Typography.Paragraph>
-            {hlConfig.builderAddress === null ? (
-              <Typography.Paragraph className="text-sm font-normal">
-                not configured
-              </Typography.Paragraph>
-            ) : (
-              <AddressText
-                address={hlConfig.builderAddress}
-                truncated
-                className="text-sm tabular-nums font-normal"
-              />
+          <AccountSection
+            value="appearance"
+            title="Appearance"
+            measure={appearanceMeasure(
+              resolveChoice(theme, hasAdaptiveThemes),
+              theme === "light" ? "light" : "dark"
             )}
-          </View>
-          <InfoRow label="Max builder fee" value={`${hlConfig.maxBuilderFee} tenths of a bp`} />
-          <InfoRow label="Referral" value={hlConfig.referralCode ?? "none"} />
-        </AccountSection>
-      </Accordion>
-    </ScrollView>
+          >
+            <AppearanceCard />
+          </AccountSection>
+
+          <AccountSection
+            value="about"
+            title="About"
+            measure={{ label: Constants.expoConfig?.version ?? "dev", tone: "muted" }}
+          >
+            <InfoRow label="Network" value={env === "testnet" ? "Testnet" : "Mainnet"} />
+            <View className="flex-row items-start justify-between gap-4">
+              <Typography.Paragraph className="text-sm text-muted font-normal">
+                Builder
+              </Typography.Paragraph>
+              {hlConfig.builderAddress === null ? (
+                <Typography.Paragraph className="text-sm font-normal">
+                  not configured
+                </Typography.Paragraph>
+              ) : (
+                <AddressText
+                  address={hlConfig.builderAddress}
+                  truncated
+                  className="text-sm tabular-nums font-normal"
+                />
+              )}
+            </View>
+            <InfoRow label="Max builder fee" value={`${hlConfig.maxBuilderFee} tenths of a bp`} />
+            <InfoRow label="Referral" value={hlConfig.referralCode ?? "none"} />
+          </AccountSection>
+        </Accordion>
+      </ScrollView>
+    </View>
   );
 }
 

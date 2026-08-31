@@ -63,6 +63,7 @@ import {
 } from "heroui-native";
 import { EmptyState, ProgressCircle, Segment } from "heroui-native-pro";
 
+import { ScreenGradient } from "@/components/common/ScreenGradient";
 import { HistoryChart } from "@/components/charts/HistoryChart";
 
 import { PerpSpotMove } from "@/components/money/PerpSpotMove";
@@ -797,586 +798,598 @@ function PortfolioTab(): JSX.Element {
   // which is also the address whose portfolio history the chart must show.
   const actingAs = address;
 
-  return (
-    <ScrollView
-      className="flex-1 bg-background"
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      contentContainerClassName="px-4 gap-4"
-      contentContainerStyle={{
-        paddingTop: insets.top + 8,
-        // `insets.bottom` is the home indicator, NOT the tab bar. `NativeTabs`
-        // renders a real UIKit bar that FLOATS over the content on iOS 26, and
-        // nothing reports its height to this screen — so the last row sat under
-        // it until you scrolled. Measured against the rendered bar; it is a
-        // constant rather than a guess dressed up as arithmetic.
-        paddingBottom: insets.bottom + TAB_BAR_CLEARANCE,
-      }}
-    >
-      {/* ------------------------------------------------ notifications */}
-      {/* Above everything: this channel carries liquidation warnings, the one
-          thing the exchange pushes that a user cannot read off their own
-          numbers. Renders nothing when there is nothing pending. */}
-      <NotificationBanner store={session.stores.notifications} />
+  // Built as named values, not inlined into the return. The hero and the
+  // open-orders list are ~100 and ~30 lines of branch each; as inline
+  // ternaries they buried the shape of the screen between a `? (` and a
+  // `) }` far enough apart that neither end told you what it belonged
+  // to. See the same treatment on `market/[coin]`.
 
-      {/* -------------------------------------------------- account */}
-      {/* Named even when there is nothing to switch to: a balance shown
-          without an owner is exactly the confusion this screen must avoid. */}
-      <AccountSwitcher
-        master={sessionState.identity.address}
-        actingAs={address}
-        subAccounts={sessionState.subAccounts}
-        combinedPerp={
-          // Only when VIEWING the master: acting as a sub makes `summary` the
-          // sub's clearinghouse, and master + subs would double-count it while
-          // missing the actual master.
-          address !== null && address.toLowerCase() === sessionState.identity.address.toLowerCase()
-            ? combinedPerpEquity(summary?.total.accountValue ?? null, sessionState.subAccounts)
-            : null
-        }
-        isSwitching={status === "starting"}
-        onSelect={onSelectAccount}
-      />
-
-      {/* ------------------------------------------------------ hero */}
-      {summary === null ? (
-        // No frame yet is NOT zero. Skeleton until the websocket speaks.
-        <LoadingCard />
-      ) : (
-        <Card className="gap-2">
-          <View className="flex-row items-center justify-between">
-            <Typography.Paragraph className="text-xs text-muted font-normal">
-              Account value
-            </Typography.Paragraph>
-            {stale ? (
-              <Chip size="sm" color="warning" variant="soft">
-                <Chip.Label className="font-medium">stale</Chip.Label>
-              </Chip>
-            ) : null}
-          </View>
-          {hero === null ? (
-            // A part of the split is still unknown; a big number summed over
-            // two of three parts would be a confident understatement.
-            <Skeleton className="h-10 w-44 rounded-lg" />
-          ) : (
-            // Opacity on the ROW, not on a half: a stale read is stale in both
-            // directions, and dimming only the cents would read as the design
-            // rather than as a warning.
-            <View className={stale ? "flex-row items-center opacity-50" : "flex-row items-center"}>
-              {/* Both halves are the same `Typography.Heading` so their font
-                  size — and therefore their line boxes — are identical by
-                  construction. `items-center` centres boxes, so two different
-                  sizes here would centre to two different baselines and the
-                  cents would float. The only difference permitted is colour,
-                  and the weight rides on `font-bold` rather than on a style:
-                  SF Pro Rounded resolves through the font-* classes alone. */}
-              <Typography.Heading className="font-bold tabular-nums">
-                {hero.major}
-              </Typography.Heading>
-              {hero.minor === "" ? null : (
-                <Typography.Heading className="text-muted font-bold tabular-nums">
-                  {hero.minor}
-                </Typography.Heading>
-              )}
-            </View>
-          )}
-          <View className="flex-1 flex-row gap-2">
-            <EquityTile label="Perps" value={equity.perp} />
-            <EquityTile label="Spot" value={equity.spot} />
-            <EquityTile
-              label="Vaults"
-              value={equity.vaults}
-              onPress={() => router.push("/vaults")}
-            />
-          </View>
-          {equity.unpriced.length > 0 ? (
-            <Chip size="sm" variant="soft" className="self-start">
-              {/* Without this the totals read as complete while a holding
-                  with no quote is silently missing from them. */}
-              <Chip.Label className="font-medium">
-                no price for {equity.unpriced.join(", ")} — not in totals
-              </Chip.Label>
+  const heroSection =
+    summary === null ? (
+      // No frame yet is NOT zero. Skeleton until the websocket speaks.
+      <LoadingCard />
+    ) : (
+      <Card className="gap-2">
+        <View className="flex-row items-center justify-between">
+          <Typography.Paragraph className="text-xs text-muted font-normal">
+            Account value
+          </Typography.Paragraph>
+          {stale ? (
+            <Chip size="sm" color="warning" variant="soft">
+              <Chip.Label className="font-medium">stale</Chip.Label>
             </Chip>
           ) : null}
-          <View className="flex-row items-center justify-between">
-            <Typography.Paragraph className="text-xs text-muted font-normal">
-              Withdrawable
-            </Typography.Paragraph>
-            <Typography.Paragraph className="text-sm font-normal">
-              <UsdLabel value={summary.withdrawable} />
-            </Typography.Paragraph>
+        </View>
+        {hero === null ? (
+          // A part of the split is still unknown; a big number summed over
+          // two of three parts would be a confident understatement.
+          <Skeleton className="h-10 w-44 rounded-lg" />
+        ) : (
+          // Opacity on the ROW, not on a half: a stale read is stale in both
+          // directions, and dimming only the cents would read as the design
+          // rather than as a warning.
+          <View className={stale ? "flex-row items-center opacity-50" : "flex-row items-center"}>
+            {/* Both halves are the same `Typography.Heading` so their font
+              size — and therefore their line boxes — are identical by
+              construction. `items-center` centres boxes, so two different
+              sizes here would centre to two different baselines and the
+              cents would float. The only difference permitted is colour,
+              and the weight rides on `font-bold` rather than on a style:
+              SF Pro Rounded resolves through the font-* classes alone. */}
+            <Typography.Heading className="font-bold tabular-nums">{hero.major}</Typography.Heading>
+            {hero.minor === "" ? null : (
+              <Typography.Heading className="text-muted font-bold tabular-nums">
+                {hero.minor}
+              </Typography.Heading>
+            )}
           </View>
-          {/* Four EQUAL tiles, not two buttons and a glyph. The old row ranked
-              them by chrome — a filled Deposit, an outlined Withdraw, an
-              unlabelled Send — which said "deposit is what you came for". They
-              are four destinations; the row should not argue about which. */}
-          <View className="flex-row gap-2 pt-1">
-            <ActionTile
-              label="Deposit"
-              icon={<ArrowDownToLine size={ACTION_ICON_PX} color={actionIconColor} />}
-              onPress={() => router.push("/deposit")}
-            />
-            <ActionTile
-              label="Withdraw"
-              icon={<ArrowUpFromLine size={ACTION_ICON_PX} color={actionIconColor} />}
-              onPress={() => router.push("/withdraw")}
-            />
-            <ActionTile
-              label="Send"
-              icon={<Send size={ACTION_ICON_PX} color={actionIconColor} />}
-              onPress={() => router.push("/send")}
-            />
-            {/* NOT gated on `canTrade`: without an agent the move is signed by
-                the master wallet instead, which works — it just prompts, and
-                `moveCaption` already appends "· asks you to sign" so the
-                prompt is announced before it appears. Disabling this would
-                refuse an action the user can actually complete. */}
-            <ActionTile
-              label="Move"
-              icon={<ArrowLeftRight size={ACTION_ICON_PX} color={actionIconColor} />}
-              onPress={() => setIsMoving(true)}
+        )}
+        <View className="flex-1 flex-row gap-2">
+          <EquityTile label="Perps" value={equity.perp} />
+          <EquityTile label="Spot" value={equity.spot} />
+          <EquityTile label="Vaults" value={equity.vaults} onPress={() => router.push("/vaults")} />
+        </View>
+        {equity.unpriced.length > 0 ? (
+          <Chip size="sm" variant="soft" className="self-start">
+            {/* Without this the totals read as complete while a holding
+              with no quote is silently missing from them. */}
+            <Chip.Label className="font-medium">
+              no price for {equity.unpriced.join(", ")} — not in totals
+            </Chip.Label>
+          </Chip>
+        ) : null}
+        <View className="flex-row items-center justify-between">
+          <Typography.Paragraph className="text-xs text-muted font-normal">
+            Withdrawable
+          </Typography.Paragraph>
+          <Typography.Paragraph className="text-sm font-normal">
+            <UsdLabel value={summary.withdrawable} />
+          </Typography.Paragraph>
+        </View>
+        {/* Four EQUAL tiles, not two buttons and a glyph. The old row ranked
+          them by chrome — a filled Deposit, an outlined Withdraw, an
+          unlabelled Send — which said "deposit is what you came for". They
+          are four destinations; the row should not argue about which. */}
+        <View className="flex-row gap-2 pt-1">
+          <ActionTile
+            label="Deposit"
+            icon={<ArrowDownToLine size={ACTION_ICON_PX} color={actionIconColor} />}
+            onPress={() => router.push("/deposit")}
+          />
+          <ActionTile
+            label="Withdraw"
+            icon={<ArrowUpFromLine size={ACTION_ICON_PX} color={actionIconColor} />}
+            onPress={() => router.push("/withdraw")}
+          />
+          <ActionTile
+            label="Send"
+            icon={<Send size={ACTION_ICON_PX} color={actionIconColor} />}
+            onPress={() => router.push("/send")}
+          />
+          {/* NOT gated on `canTrade`: without an agent the move is signed by
+            the master wallet instead, which works — it just prompts, and
+            `moveCaption` already appends "· asks you to sign" so the
+            prompt is announced before it appears. Disabling this would
+            refuse an action the user can actually complete. */}
+          <ActionTile
+            label="Move"
+            icon={<ArrowLeftRight size={ACTION_ICON_PX} color={actionIconColor} />}
+            onPress={() => setIsMoving(true)}
+          />
+        </View>
+      </Card>
+    );
+
+  const openOrdersList =
+    orders.rows.length === 0 && orders.unconfirmed.length === 0 ? (
+      <Empty title="No open orders" description="Resting orders appear here live." />
+    ) : (
+      <>
+        {/* One bulk call, honest about partial-batch semantics: what
+          remains in the list after the socket refresh is what
+          actually survived. Armed two-tap like the per-row Cancel —
+          resting orders are recoverable in a way a market close is
+          not, so no Dialog. */}
+        {canTrade && orders.rows.length > 1 ? (
+          <View className="flex-row justify-end">
+            <ConfirmButton
+              label="Cancel all"
+              confirmLabel={`Cancel ${orders.rows.length} orders?`}
+              onConfirm={() => void actions.cancelAll(orders.rows)}
+              isBusy={false}
+              isDisabled={!canTrade}
             />
           </View>
-        </Card>
-      )}
+        ) : null}
+        {orders.rows.map((row) => (
+          <OpenOrderItem
+            key={row.oid}
+            row={row}
+            named={nameOutcome(row.coin)}
+            onOpenDetail={() => setDetail(orderDetail(row))}
+            onCancel={() => void actions.cancelOrder(row)}
+            isBusy={actions.isBusy(actions.orderKey(row))}
+            canTrade={canTrade}
+          />
+        ))}
+      </>
+    );
 
-      {/* ------------------------------------------------------ chart */}
-      {actingAs !== null ? <PortfolioChart key={actingAs} user={actingAs} /> : null}
+  return (
+    // The gradient cannot live inside the scroller — an absolute child of a
+    // ScrollView scrolls with the content and would slide off the top.
+    <View className="flex-1 bg-background">
+      <ScreenGradient />
+      <ScrollView
+        className="flex-1"
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        contentContainerClassName="px-4 gap-4"
+        contentContainerStyle={{
+          paddingTop: insets.top + 8,
+          // `insets.bottom` is the home indicator, NOT the tab bar. `NativeTabs`
+          // renders a real UIKit bar that FLOATS over the content on iOS 26, and
+          // nothing reports its height to this screen — so the last row sat under
+          // it until you scrolled. Measured against the rendered bar; it is a
+          // constant rather than a guess dressed up as arithmetic.
+          paddingBottom: insets.bottom + TAB_BAR_CLEARANCE,
+        }}
+      >
+        {/* ------------------------------------------------ notifications */}
+        {/* Above everything: this channel carries liquidation warnings, the one
+          thing the exchange pushes that a user cannot read off their own
+          numbers. Renders nothing when there is nothing pending. */}
+        <NotificationBanner store={session.stores.notifications} />
 
-      {/* ------------------------------------------------- health */}
-      {summary !== null ? <AccountHealth summary={summary} /> : null}
+        {/* -------------------------------------------------- account */}
+        {/* Named even when there is nothing to switch to: a balance shown
+          without an owner is exactly the confusion this screen must avoid. */}
+        <AccountSwitcher
+          master={sessionState.identity.address}
+          actingAs={address}
+          subAccounts={sessionState.subAccounts}
+          combinedPerp={
+            // Only when VIEWING the master: acting as a sub makes `summary` the
+            // sub's clearinghouse, and master + subs would double-count it while
+            // missing the actual master.
+            address !== null &&
+            address.toLowerCase() === sessionState.identity.address.toLowerCase()
+              ? combinedPerpEquity(summary?.total.accountValue ?? null, sessionState.subAccounts)
+              : null
+          }
+          isSwitching={status === "starting"}
+          onSelect={onSelectAccount}
+        />
 
-      {/* ------------------------------------- positions + activity */}
-      <ActivityCard
-        activity={shownActivity}
-        scope={activityScope}
-        byCoin={pnlByCoin}
-        unrealizedPnl={totalUnrealizedPnl(positions)}
-        openPositions={positions.length}
-      />
+        {/* ------------------------------------------------------ hero */}
+        {heroSection}
 
-      {/* --------------------------------------------------- fee rates */}
-      {/* Only when ready: a deferred read rendering as 0.00% would claim a
+        {/* ------------------------------------------------------ chart */}
+        {actingAs !== null ? <PortfolioChart key={actingAs} user={actingAs} /> : null}
+
+        {/* ------------------------------------------------- health */}
+        {summary !== null ? <AccountHealth summary={summary} /> : null}
+
+        {/* ------------------------------------- positions + activity */}
+        <ActivityCard
+          activity={shownActivity}
+          scope={activityScope}
+          byCoin={pnlByCoin}
+          unrealizedPnl={totalUnrealizedPnl(positions)}
+          openPositions={positions.length}
+        />
+
+        {/* --------------------------------------------------- fee rates */}
+        {/* Only when ready: a deferred read rendering as 0.00% would claim a
           fee tier the budget merely declined to fetch. */}
-      {feeRates.state.kind === "ready" ? <FeeCard fees={feeRates.state.value} /> : null}
+        {feeRates.state.kind === "ready" ? <FeeCard fees={feeRates.state.value} /> : null}
 
-      {/* Staking: only when something is actually staked, undelegated, or in
+        {/* Staking: only when something is actually staked, undelegated, or in
           withdrawal — a never-staked account reports genuine zeros, and a card
           of zeros asserts nothing. */}
-      {staking.state.kind === "ready" && !stakingIsEmpty(staking.state.value) ? (
-        <StakingCard summary={staking.state.value} />
-      ) : null}
+        {staking.state.kind === "ready" && !stakingIsEmpty(staking.state.value) ? (
+          <StakingCard summary={staking.state.value} />
+        ) : null}
 
-      {/* ----------------------------------------------------- sections */}
-      <Tabs
-        variant="secondary"
-        value={section}
-        onValueChange={(value) => setSection(value as Section)}
-      >
-        {/* Seven sections do not fit a phone. `Tabs.ScrollView` must be the
+        {/* ----------------------------------------------------- sections */}
+        <Tabs
+          variant="secondary"
+          value={section}
+          onValueChange={(value) => setSection(value as Section)}
+        >
+          {/* Seven sections do not fit a phone. `Tabs.ScrollView` must be the
             List's ONLY child — the component detects it by displayName and
             silently falls back to a fixed row otherwise. */}
-        <Tabs.List>
-          <Tabs.ScrollView scrollAlign="center">
-            <Tabs.Indicator />
-            {SECTIONS.map(([value, label]) => (
-              <Tabs.Trigger key={value} value={value}>
-                <Tabs.Label className="font-medium">{label}</Tabs.Label>
-              </Tabs.Trigger>
+          <Tabs.List>
+            <Tabs.ScrollView scrollAlign="center">
+              <Tabs.Indicator />
+              {SECTIONS.map(([value, label]) => (
+                <Tabs.Trigger key={value} value={value}>
+                  <Tabs.Label className="font-medium">{label}</Tabs.Label>
+                </Tabs.Trigger>
+              ))}
+            </Tabs.ScrollView>
+          </Tabs.List>
+        </Tabs>
+
+        {actions.state.lastError !== null ? (
+          <Chip size="sm" color="danger" variant="soft" className="self-start">
+            <Chip.Label className="font-medium">
+              {actions.state.lastError.code}: {actions.state.lastError.message}
+            </Chip.Label>
+          </Chip>
+        ) : null}
+
+        <Card>
+          {section === "balances" &&
+            (spot === null ? (
+              <LoadingCard />
+            ) : tokenBalances.length === 0 ? (
+              <Empty title="No spot balances" description="Spot holdings appear here live." />
+            ) : (
+              tokenBalances.map((balance) => (
+                <BalanceItem key={balance.coin} balance={balance} prices={prices} />
+              ))
             ))}
-          </Tabs.ScrollView>
-        </Tabs.List>
-      </Tabs>
 
-      {actions.state.lastError !== null ? (
-        <Chip size="sm" color="danger" variant="soft" className="self-start">
-          <Chip.Label className="font-medium">
-            {actions.state.lastError.code}: {actions.state.lastError.message}
-          </Chip.Label>
-        </Chip>
-      ) : null}
-
-      <Card>
-        {section === "balances" &&
-          (spot === null ? (
-            <LoadingCard />
-          ) : tokenBalances.length === 0 ? (
-            <Empty title="No spot balances" description="Spot holdings appear here live." />
-          ) : (
-            tokenBalances.map((balance) => (
-              <BalanceItem key={balance.coin} balance={balance} prices={prices} />
-            ))
-          ))}
-
-        {section === "positions" &&
-          (summary === null ? (
-            <LoadingCard />
-          ) : positions.length === 0 ? (
-            <Empty title="No open positions" description="Positions you open appear here live." />
-          ) : (
-            <>
-              {/* The bulk close moved HERE when the market sheet's tabs
+          {section === "positions" &&
+            (summary === null ? (
+              <LoadingCard />
+            ) : positions.length === 0 ? (
+              <Empty title="No open positions" description="Positions you open appear here live." />
+            ) : (
+              <>
+                {/* The bulk close moved HERE when the market sheet's tabs
                   retired (2026-08-29): Portfolio is where every position is
                   in view, which is the only honest place for a button that
                   closes all of them. Dialog-confirmed — a batch market close
                   deserves one read-and-confirm. */}
-              {canTrade && positions.length > 1 ? (
-                <View className="flex-row justify-end">
-                  <Button size="sm" variant="tertiary" onPress={() => setConfirmCloseAll(true)}>
-                    <Button.Label className="font-medium text-danger">Close All</Button.Label>
-                  </Button>
-                </View>
-              ) : null}
-              {positions.map((position) => (
-                <PositionItem
-                  key={position.coin}
-                  position={position}
-                  canTrade={canTrade}
-                  isBusy={actions.isBusy(actions.positionKey(position))}
-                  onClose={() => void actions.closePosition(position)}
-                  onOpenDetail={() => setDetail(positionDetail(position))}
-                />
-              ))}
-            </>
-          ))}
-
-        {section === "outcomes" &&
-          (spot === null ? (
-            <LoadingCard />
-          ) : outcomeBalances.length === 0 ? (
-            <Empty
-              title="No outcome shares"
-              description="Prediction-market holdings appear here live."
-            />
-          ) : (
-            outcomeBalances.map((balance) => (
-              <BalanceItem
-                key={balance.coin}
-                balance={balance}
-                named={nameOutcome(balance.coin)}
-                prices={prices}
-              />
-            ))
-          ))}
-
-        {section === "orders" && (
-          <>
-            {orders.truncated ? (
-              <Chip size="sm" color="warning" variant="soft" className="self-start">
-                <Chip.Label className="font-medium">
-                  showing some of your orders — the list was truncated
-                </Chip.Label>
-              </Chip>
-            ) : null}
-            {orders.unconfirmed.map((unconfirmed) => (
-              <UnconfirmedOrderItem key={unconfirmed.cloid} order={unconfirmed} />
-            ))}
-            {orders.rows.length === 0 && orders.unconfirmed.length === 0 ? (
-              <Empty title="No open orders" description="Resting orders appear here live." />
-            ) : (
-              <>
-                {/* One bulk call, honest about partial-batch semantics: what
-                    remains in the list after the socket refresh is what
-                    actually survived. Armed two-tap like the per-row Cancel —
-                    resting orders are recoverable in a way a market close is
-                    not, so no Dialog. */}
-                {canTrade && orders.rows.length > 1 ? (
+                {canTrade && positions.length > 1 ? (
                   <View className="flex-row justify-end">
-                    <ConfirmButton
-                      label="Cancel all"
-                      confirmLabel={`Cancel ${orders.rows.length} orders?`}
-                      onConfirm={() => void actions.cancelAll(orders.rows)}
-                      isBusy={false}
-                      isDisabled={!canTrade}
-                    />
+                    <Button size="sm" variant="tertiary" onPress={() => setConfirmCloseAll(true)}>
+                      <Button.Label className="font-medium text-danger">Close All</Button.Label>
+                    </Button>
                   </View>
                 ) : null}
-                {orders.rows.map((row) => (
-                  <OpenOrderItem
-                    key={row.oid}
-                    row={row}
-                    named={nameOutcome(row.coin)}
-                    onOpenDetail={() => setDetail(orderDetail(row))}
-                    onCancel={() => void actions.cancelOrder(row)}
-                    isBusy={actions.isBusy(actions.orderKey(row))}
+                {positions.map((position) => (
+                  <PositionItem
+                    key={position.coin}
+                    position={position}
                     canTrade={canTrade}
+                    isBusy={actions.isBusy(actions.positionKey(position))}
+                    onClose={() => void actions.closePosition(position)}
+                    onOpenDetail={() => setDetail(positionDetail(position))}
                   />
                 ))}
               </>
-            )}
+            ))}
 
-            {/* Past orders, from a different source than the live list above:
+          {section === "outcomes" &&
+            (spot === null ? (
+              <LoadingCard />
+            ) : outcomeBalances.length === 0 ? (
+              <Empty
+                title="No outcome shares"
+                description="Prediction-market holdings appear here live."
+              />
+            ) : (
+              outcomeBalances.map((balance) => (
+                <BalanceItem
+                  key={balance.coin}
+                  balance={balance}
+                  named={nameOutcome(balance.coin)}
+                  prices={prices}
+                />
+              ))
+            ))}
+
+          {section === "orders" && (
+            <>
+              {orders.truncated ? (
+                <Chip size="sm" color="warning" variant="soft" className="self-start">
+                  <Chip.Label className="font-medium">
+                    showing some of your orders — the list was truncated
+                  </Chip.Label>
+                </Chip>
+              ) : null}
+              {orders.unconfirmed.map((unconfirmed) => (
+                <UnconfirmedOrderItem key={unconfirmed.cloid} order={unconfirmed} />
+              ))}
+              {openOrdersList}
+
+              {/* Past orders, from a different source than the live list above:
                 REST history rather than the websocket. Kept in the same tab
                 because it is the same subject, and separated by a heading so
                 the two are not mistaken for one list. */}
-            <View className="gap-1 border-t border-border pt-4">
-              <Typography.Paragraph className="text-xs font-semibold uppercase text-muted">
-                Order history
-              </Typography.Paragraph>
-            </View>
-            <FetchedList
-              state={orderHistory.state}
-              refresh={orderHistory.refresh}
-              isEmpty={(view) => view.orders.length === 0}
-              emptyTitle="No past orders"
-              emptyDescription="Filled and cancelled orders appear here."
-            >
-              {(view) => (
-                <View className="gap-2">
-                  {view.truncated ? (
-                    <TruncationNotice label="showing recent activity — older orders are unreachable" />
-                  ) : null}
-                  {view.orders.slice(0, ORDER_HISTORY_ROWS).map((order) => (
+              <View className="gap-1 border-t border-border pt-4">
+                <Typography.Paragraph className="text-xs font-semibold uppercase text-muted">
+                  Order history
+                </Typography.Paragraph>
+              </View>
+              <FetchedList
+                state={orderHistory.state}
+                refresh={orderHistory.refresh}
+                isEmpty={(view) => view.orders.length === 0}
+                emptyTitle="No past orders"
+                emptyDescription="Filled and cancelled orders appear here."
+              >
+                {(view) => (
+                  <View className="gap-2">
+                    {view.truncated ? (
+                      <TruncationNotice label="showing recent activity — older orders are unreachable" />
+                    ) : null}
+                    {view.orders.slice(0, ORDER_HISTORY_ROWS).map((order) => (
+                      <Pressable
+                        accessible={false}
+                        key={order.oid}
+                        onPress={() => setDetail(orderHistoryDetail(order))}
+                      >
+                        <OrderHistoryItem order={order} named={nameOutcome(order.coin)} />
+                      </Pressable>
+                    ))}
+                  </View>
+                )}
+              </FetchedList>
+            </>
+          )}
+
+          {section === "trades" && (
+            <>
+              {/* The share sheet is the phone's CSV download. The export prefers
+                the WALKED history (complete) over the windowed store, so the
+                file can honestly carry everything, not just what is rendered. */}
+              {(walked?.fills.length ?? fills.length) > 0 ? (
+                <Button
+                  size="sm"
+                  variant="tertiary"
+                  className="self-start"
+                  onPress={() =>
+                    void Share.share({
+                      title: "fills.csv",
+                      message: fillsCsv(walked?.fills ?? fills),
+                    })
+                  }
+                >
+                  <Button.Label className="font-medium">Export CSV</Button.Label>
+                </Button>
+              ) : null}
+              {fills.length === 0 ? (
+                <Empty
+                  title="No trades yet"
+                  description="Executions appear here live as they fill."
+                />
+              ) : (
+                // Newest first. The store keeps wire order, which is oldest-first
+                // for the REST seed — reversing here rather than in the store keeps
+                // the store a faithful mirror of the wire.
+                [...fills]
+                  .sort((a, b) => b.time - a.time)
+                  .slice(0, FILL_ROWS)
+                  .map((fill) => (
+                    // An outcome fill's coin is `#102251`; the namer accepts that
+                    // spelling as well as the `+` one a balance uses.
                     <Pressable
                       accessible={false}
-                      key={order.oid}
-                      onPress={() => setDetail(orderHistoryDetail(order))}
+                      key={fill.key}
+                      onPress={() => setDetail(fillDetail(fill))}
                     >
-                      <OrderHistoryItem order={order} named={nameOutcome(order.coin)} />
+                      <FillItem fill={fill} named={nameOutcome(fill.coin)} />
+                    </Pressable>
+                  ))
+              )}
+            </>
+          )}
+
+          {section === "twap" && (
+            <FetchedList
+              state={twaps.state}
+              refresh={twaps.refresh}
+              isEmpty={(rows) => rows.length === 0}
+              emptyTitle="No TWAP orders"
+              emptyDescription="Time-weighted orders you run appear here."
+            >
+              {(rows) => (
+                <>
+                  {rows.length > TWAP_ROWS ? (
+                    <TruncationNotice label={`showing the most recent ${TWAP_ROWS}`} />
+                  ) : null}
+                  {rows.slice(0, TWAP_ROWS).map((row, i) => (
+                    // Index key, deliberately: `twapId` is ABSENT from every one
+                    // of 12,806 measured history rows, so there is no id to use.
+                    <TwapItem key={`${row.time}:${i}`} row={row} />
+                  ))}
+                </>
+              )}
+            </FetchedList>
+          )}
+
+          {section === "funding" && (
+            <FetchedList
+              state={funding.state}
+              refresh={funding.refresh}
+              isEmpty={(rows) => rows.length === 0}
+              emptyTitle="No funding yet"
+              emptyDescription="Hourly funding on open perp positions appears here."
+            >
+              {(rows) => (
+                <View className="gap-2">
+                  {/* The read is windowed, and saying so keeps the list from
+                    reading as the whole history. */}
+                  <TruncationNotice
+                    label={
+                      rows.length > FUNDING_ROWS
+                        ? `last ${funding.windowDays} days — showing the most recent ${FUNDING_ROWS}`
+                        : `last ${funding.windowDays} days`
+                    }
+                  />
+                  {rows.slice(0, FUNDING_ROWS).map((row, i) => (
+                    <Pressable
+                      accessible={false}
+                      key={`${row.time}:${row.coin}:${i}`}
+                      onPress={() => setDetail(fundingDetail(row))}
+                    >
+                      <FundingItem row={row} />
                     </Pressable>
                   ))}
+                  {/* Pagination lives BELOW the rows — where a reader arrives
+                    when they run out of history. Each press widens the window
+                    another 30 days; the spend stays deliberate. */}
+                  <Button size="sm" variant="tertiary" onPress={funding.loadOlder}>
+                    <Button.Label className="font-medium">Load 30 more days</Button.Label>
+                  </Button>
                 </View>
               )}
             </FetchedList>
-          </>
-        )}
+          )}
 
-        {section === "trades" && (
-          <>
-            {/* The share sheet is the phone's CSV download. The export prefers
-                the WALKED history (complete) over the windowed store, so the
-                file can honestly carry everything, not just what is rendered. */}
-            {(walked?.fills.length ?? fills.length) > 0 ? (
-              <Button
-                size="sm"
-                variant="tertiary"
-                className="self-start"
-                onPress={() =>
-                  void Share.share({
-                    title: "fills.csv",
-                    message: fillsCsv(walked?.fills ?? fills),
-                  })
-                }
-              >
-                <Button.Label className="font-medium">Export CSV</Button.Label>
-              </Button>
-            ) : null}
-            {fills.length === 0 ? (
-              <Empty
-                title="No trades yet"
-                description="Executions appear here live as they fill."
-              />
-            ) : (
-              // Newest first. The store keeps wire order, which is oldest-first
-              // for the REST seed — reversing here rather than in the store keeps
-              // the store a faithful mirror of the wire.
-              [...fills]
-                .sort((a, b) => b.time - a.time)
-                .slice(0, FILL_ROWS)
-                .map((fill) => (
-                  // An outcome fill's coin is `#102251`; the namer accepts that
-                  // spelling as well as the `+` one a balance uses.
-                  <Pressable
-                    accessible={false}
-                    key={fill.key}
-                    onPress={() => setDetail(fillDetail(fill))}
-                  >
-                    <FillItem fill={fill} named={nameOutcome(fill.coin)} />
-                  </Pressable>
-                ))
-            )}
-          </>
-        )}
-
-        {section === "twap" && (
-          <FetchedList
-            state={twaps.state}
-            refresh={twaps.refresh}
-            isEmpty={(rows) => rows.length === 0}
-            emptyTitle="No TWAP orders"
-            emptyDescription="Time-weighted orders you run appear here."
-          >
-            {(rows) => (
-              <>
-                {rows.length > TWAP_ROWS ? (
-                  <TruncationNotice label={`showing the most recent ${TWAP_ROWS}`} />
-                ) : null}
-                {rows.slice(0, TWAP_ROWS).map((row, i) => (
-                  // Index key, deliberately: `twapId` is ABSENT from every one
-                  // of 12,806 measured history rows, so there is no id to use.
-                  <TwapItem key={`${row.time}:${i}`} row={row} />
-                ))}
-              </>
-            )}
-          </FetchedList>
-        )}
-
-        {section === "funding" && (
-          <FetchedList
-            state={funding.state}
-            refresh={funding.refresh}
-            isEmpty={(rows) => rows.length === 0}
-            emptyTitle="No funding yet"
-            emptyDescription="Hourly funding on open perp positions appears here."
-          >
-            {(rows) => (
-              <View className="gap-2">
-                {/* The read is windowed, and saying so keeps the list from
-                    reading as the whole history. */}
-                <TruncationNotice
-                  label={
-                    rows.length > FUNDING_ROWS
-                      ? `last ${funding.windowDays} days — showing the most recent ${FUNDING_ROWS}`
-                      : `last ${funding.windowDays} days`
-                  }
-                />
-                {rows.slice(0, FUNDING_ROWS).map((row, i) => (
-                  <Pressable
-                    accessible={false}
-                    key={`${row.time}:${row.coin}:${i}`}
-                    onPress={() => setDetail(fundingDetail(row))}
-                  >
-                    <FundingItem row={row} />
-                  </Pressable>
-                ))}
-                {/* Pagination lives BELOW the rows — where a reader arrives
-                    when they run out of history. Each press widens the window
-                    another 30 days; the spend stays deliberate. */}
-                <Button size="sm" variant="tertiary" onPress={funding.loadOlder}>
-                  <Button.Label className="font-medium">Load 30 more days</Button.Label>
-                </Button>
-              </View>
-            )}
-          </FetchedList>
-        )}
-
-        {section === "transfers" && (
-          <FetchedList
-            state={ledger.state}
-            refresh={ledger.refresh}
-            isEmpty={(view) => view.rows.length === 0}
-            emptyTitle="No transfers"
-            emptyDescription="Deposits, withdrawals and internal moves appear here."
-          >
-            {(view) => (
-              <View className="gap-2">
-                {view.hasMore ? (
-                  <TruncationNotice label="showing your most recent transfers" />
-                ) : null}
-                {view.rows.length > 0 ? (
-                  <Button
-                    size="sm"
-                    variant="tertiary"
-                    className="self-start"
-                    onPress={() =>
-                      void Share.share({
-                        title: "transfers.csv",
-                        message: ledgerCsv(view.rows, address ?? ""),
-                      })
-                    }
-                  >
-                    <Button.Label className="font-medium">Export CSV</Button.Label>
-                  </Button>
-                ) : null}
-                {[...view.rows]
-                  .sort((a, b) => b.time - a.time)
-                  .slice(0, LEDGER_ROWS)
-                  .map((row, i) => (
-                    // `hash` is NOT unique and is all-zero on rows with no L1
-                    // transaction, so it cannot key the list on its own.
-                    <Pressable
-                      accessible={false}
-                      key={`${row.time}:${row.hash}:${i}`}
-                      onPress={() => setDetail(ledgerDetail(row, address ?? ""))}
+          {section === "transfers" && (
+            <FetchedList
+              state={ledger.state}
+              refresh={ledger.refresh}
+              isEmpty={(view) => view.rows.length === 0}
+              emptyTitle="No transfers"
+              emptyDescription="Deposits, withdrawals and internal moves appear here."
+            >
+              {(view) => (
+                <View className="gap-2">
+                  {view.hasMore ? (
+                    <TruncationNotice label="showing your most recent transfers" />
+                  ) : null}
+                  {view.rows.length > 0 ? (
+                    <Button
+                      size="sm"
+                      variant="tertiary"
+                      className="self-start"
+                      onPress={() =>
+                        void Share.share({
+                          title: "transfers.csv",
+                          message: ledgerCsv(view.rows, address ?? ""),
+                        })
+                      }
                     >
-                      <LedgerItem row={row} viewer={address ?? ""} />
-                    </Pressable>
-                  ))}
-                {view.hasMore ? (
-                  // Pagination BELOW the rows — where a reader arrives when
-                  // they run out. Disappears once the walk meets the list.
-                  <Button
-                    size="sm"
-                    variant="tertiary"
-                    isDisabled={ledger.isLoadingOlder}
-                    onPress={ledger.loadOlder}
-                  >
-                    <Button.Label className="font-medium">
-                      {ledger.isLoadingOlder ? "Loading…" : "Load older"}
-                    </Button.Label>
-                  </Button>
-                ) : null}
-              </View>
-            )}
-          </FetchedList>
-        )}
-      </Card>
+                      <Button.Label className="font-medium">Export CSV</Button.Label>
+                    </Button>
+                  ) : null}
+                  {[...view.rows]
+                    .sort((a, b) => b.time - a.time)
+                    .slice(0, LEDGER_ROWS)
+                    .map((row, i) => (
+                      // `hash` is NOT unique and is all-zero on rows with no L1
+                      // transaction, so it cannot key the list on its own.
+                      <Pressable
+                        accessible={false}
+                        key={`${row.time}:${row.hash}:${i}`}
+                        onPress={() => setDetail(ledgerDetail(row, address ?? ""))}
+                      >
+                        <LedgerItem row={row} viewer={address ?? ""} />
+                      </Pressable>
+                    ))}
+                  {view.hasMore ? (
+                    // Pagination BELOW the rows — where a reader arrives when
+                    // they run out. Disappears once the walk meets the list.
+                    <Button
+                      size="sm"
+                      variant="tertiary"
+                      isDisabled={ledger.isLoadingOlder}
+                      onPress={ledger.loadOlder}
+                    >
+                      <Button.Label className="font-medium">
+                        {ledger.isLoadingOlder ? "Loading…" : "Load older"}
+                      </Button.Label>
+                    </Button>
+                  ) : null}
+                </View>
+              )}
+            </FetchedList>
+          )}
+        </Card>
 
-      {/* One sheet for every row type; the content comes from `rowDetail.ts`,
+        {/* One sheet for every row type; the content comes from `rowDetail.ts`,
           which is where the rules about what each field means live. */}
-      <RowDetailSheet detail={detail} onClose={() => setDetail(null)} />
+        <RowDetailSheet detail={detail} onClose={() => setDetail(null)} />
 
-      {/* The Move tile's destination. Same control the deposit and withdraw
+        {/* The Move tile's destination. Same control the deposit and withdraw
           screens mount — its props are read here, never re-derived. */}
-      {/* The Close All confirm. A batch market close deserves one
+        {/* The Close All confirm. A batch market close deserves one
           read-and-confirm; the per-row Close already has its own armed
           state. Each closes with a reduce-only IOC priced at the live mid. */}
-      <Dialog isOpen={confirmCloseAll} onOpenChange={setConfirmCloseAll}>
-        <Dialog.Portal>
-          <Dialog.Overlay />
-          <Dialog.Content className="gap-4 bg-background">
-            <Dialog.ContentBackground className="bg-surface" />
-            <View className="gap-1">
-              <Dialog.Title className="font-semibold">
-                Close {positions.length} positions at market?
-              </Dialog.Title>
-              <Dialog.Description className="text-sm font-normal">
-                Each closes with a reduce-only IOC priced at the live mid.
-              </Dialog.Description>
-            </View>
-            <View className="flex-row gap-2">
-              <View className="flex-1">
-                <Button variant="tertiary" onPress={() => setConfirmCloseAll(false)}>
-                  <Button.Label className="font-medium">Cancel</Button.Label>
-                </Button>
+        <Dialog isOpen={confirmCloseAll} onOpenChange={setConfirmCloseAll}>
+          <Dialog.Portal>
+            <Dialog.Overlay />
+            <Dialog.Content className="gap-4 bg-background">
+              <Dialog.ContentBackground className="bg-surface" />
+              <View className="gap-1">
+                <Dialog.Title className="font-semibold">
+                  Close {positions.length} positions at market?
+                </Dialog.Title>
+                <Dialog.Description className="text-sm font-normal">
+                  Each closes with a reduce-only IOC priced at the live mid.
+                </Dialog.Description>
               </View>
-              <View className="flex-1">
-                <Button
-                  variant="danger"
-                  onPress={() => {
-                    setConfirmCloseAll(false);
-                    void actions.closeAll(positions);
-                  }}
-                >
-                  <Button.Label className="font-medium">Close All</Button.Label>
-                </Button>
+              <View className="flex-row gap-2">
+                <View className="flex-1">
+                  <Button variant="tertiary" onPress={() => setConfirmCloseAll(false)}>
+                    <Button.Label className="font-medium">Cancel</Button.Label>
+                  </Button>
+                </View>
+                <View className="flex-1">
+                  <Button
+                    variant="danger"
+                    onPress={() => {
+                      setConfirmCloseAll(false);
+                      void actions.closeAll(positions);
+                    }}
+                  >
+                    <Button.Label className="font-medium">Close All</Button.Label>
+                  </Button>
+                </View>
               </View>
-            </View>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog>
 
-      <Dialog isOpen={isMoving} onOpenChange={setIsMoving}>
-        <Dialog.Portal>
-          <Dialog.Overlay />
-          <Dialog.Content className="gap-4 bg-background">
-            <Dialog.ContentBackground className="bg-surface" />
-            <Dialog.Title className="font-semibold">Move USDC</Dialog.Title>
-            {/* `toSpot` because a deposit credits PERP: money accumulates
+        <Dialog isOpen={isMoving} onOpenChange={setIsMoving}>
+          <Dialog.Portal>
+            <Dialog.Overlay />
+            <Dialog.Content className="gap-4 bg-background">
+              <Dialog.ContentBackground className="bg-surface" />
+              <Dialog.Title className="font-semibold">Move USDC</Dialog.Title>
+              {/* `toSpot` because a deposit credits PERP: money accumulates
                 there, and spot is where prediction and spot trading spend it.
                 A fixed default rather than one derived from the balances —
                 a direction that changes between openings is exactly the
                 silent wrong-way move `moveView.ts` is written to prevent. */}
-            <PerpSpotMove
-              session={session}
-              canTrade={canTrade}
-              initialDirection="toSpot"
-              availableSpot={spotUsdc}
-              availablePerp={perpUsdc}
-            />
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog>
-    </ScrollView>
+              <PerpSpotMove
+                session={session}
+                canTrade={canTrade}
+                initialDirection="toSpot"
+                availableSpot={spotUsdc}
+                availablePerp={perpUsdc}
+              />
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog>
+      </ScrollView>
+    </View>
   );
 }
 

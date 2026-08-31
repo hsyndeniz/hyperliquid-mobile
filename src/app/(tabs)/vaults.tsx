@@ -29,6 +29,7 @@ import { router, useFocusEffect } from "expo-router";
 import { Button, Chip, InputGroup, Typography, useThemeColor } from "heroui-native";
 import { Search } from "lucide-react-native";
 
+import { ScreenGradient } from "@/components/common/ScreenGradient";
 import { InfoRow, StatusDot } from "@/components/account/primitives";
 import { TONE_TEXT } from "@/components/account/accountView";
 import { AddressText } from "@/components/money/AddressText";
@@ -276,6 +277,7 @@ function VaultsTab(): JSX.Element {
 
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: insets.top + 8 }}>
+      <ScreenGradient />
       <LegendList
         data={rows}
         renderItem={renderItem}

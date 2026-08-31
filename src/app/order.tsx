@@ -236,28 +236,26 @@ export default function OrderScreen(): JSX.Element {
 
   // While an order is in flight the sheet cannot be swiped away.
   //
-  // The parent route — the `(market)` screen of the root stack — owns the
-  // modal presentation, so dismissal is ITS option to set; this screen only
-  // says whether it is in a state that should be finished. `gestureEnabled:
-  // false` on a native sheet is a hard off rather than the damped pull the
-  // old custom card gave, which is the one thing the platform sheet does
-  // less gracefully.
+  // Set on THIS screen, which is the modal route itself since the `(market)`
+  // group was dissolved (2026-08-31). It used to reach for
+  // `navigation.getParent()` because the group's screen owned the
+  // presentation; that indirection is gone, and with it the chance of
+  // disabling the wrong route's gesture. `gestureEnabled: false` on a native
+  // sheet is a hard off rather than the damped pull the old custom card gave,
+  // which is the one thing the platform sheet does less gracefully.
   //
   // Not a correctness guard: `placeOrders` journals before it sends, so a
   // dismissed submit is still reconciled. It is there because swiping a
   // half-placed order off screen is a horrible thing to do to someone.
   const navigation = useNavigation();
   useEffect(() => {
-    const parent = navigation.getParent();
-    parent?.setOptions({ gestureEnabled: !submitting });
+    navigation.setOptions({ gestureEnabled: !submitting });
     // Restored on unmount, unconditionally. The effect only ever ran forward,
     // so a screen that unmounted while `submitting` was true — a Fast Refresh,
-    // a programmatic dismiss, an error boundary — left the PARENT route's
-    // swipe-to-dismiss disabled with nothing left to re-enable it. The market
-    // sheet then could not be dismissed by gesture for the rest of the
-    // session, on a route the user reaches from the whole app.
+    // a programmatic dismiss, an error boundary — left swipe-to-dismiss off
+    // with nothing left to re-enable it.
     return () => {
-      parent?.setOptions({ gestureEnabled: true });
+      navigation.setOptions({ gestureEnabled: true });
     };
   }, [navigation, submitting]);
   const frozen = place.phase.kind === "unknown" || settled;
@@ -410,7 +408,11 @@ export default function OrderScreen(): JSX.Element {
           Values are the resolved Tailwind steps — gap-4, px-5, pt-4. */}
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ gap: 16, paddingHorizontal: 20, paddingTop: 16 }}
+        contentContainerStyle={{
+          gap: 16,
+          paddingHorizontal: 20,
+          paddingTop: 16,
+        }}
         showsVerticalScrollIndicator={false}
       >
         {/* ------------------------------------------------------ header -- */}
@@ -814,7 +816,7 @@ export default function OrderScreen(): JSX.Element {
       </ScrollView>
 
       {/* ------------------------------------------------------ commit -- */}
-      <View className="gap-2 px-5 pt-2" style={{ paddingBottom: insets.bottom + 12 }}>
+      <View className="gap-2 px-5 pt-2" style={{ paddingBottom: insets.bottom || 16 }}>
         {phaseNote === null ? null : (
           <Typography.Paragraph
             className={`text-sm text-center font-normal ${phaseTone}`}
