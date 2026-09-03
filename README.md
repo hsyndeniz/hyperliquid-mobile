@@ -4,6 +4,7 @@ A mobile client for [Hyperliquid](https://hyperliquid.xyz) — perps, spot,
 vaults and HIP-4 prediction markets — built with Expo and React Native.
 
 <img width="1251" height="803" alt="Screenshot 2026-09-03 at 21 00 18" src="https://github.com/user-attachments/assets/0d852d81-3b83-4990-b7a0-38f62656daba" />
+<img width="1442" height="716" alt="Screenshot 2026-09-03 at 21 10 35" src="https://github.com/user-attachments/assets/fe63b6c9-bd5a-4c9a-b898-cdbb5fbc6dc0" />
 
 ##
 
