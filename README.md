@@ -96,4 +96,16 @@ verified by reverting the behaviour and watching it fail.
 
 ## Licence
 
-MIT. The `LICENSE` file is added at publish time.
+MIT — with one carve-out.
+
+`assets/fonts/` holds nine **SF Pro Rounded** faces, which are Apple's and not
+covered by this project's licence. Apple's terms are embedded in each file
+(`name` table, ID 13) and licence them for "creating mock-ups of user
+interfaces" while stating you "may not embed the Apple Font in any software
+programs". They are here because the app gates its first render on all nine
+loading, and `require()` resolves them at bundle time.
+
+If you fork this for anything you ship, that is the part to replace. RN 0.86
+maps `fontFamily: "ui-rounded"` to the OS's own rounded face on iOS with
+nothing embedded — see the note in [CLAUDE.md](CLAUDE.md) for why that does not
+work through this project's Uniwind font tokens as they stand.
